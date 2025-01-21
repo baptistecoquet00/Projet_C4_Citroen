@@ -1,5 +1,5 @@
 #include "VSCOM.h"
-
+#include <string>
 
 #ifdef __unix__
 #include <unistd.h>
