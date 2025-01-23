@@ -18,19 +18,19 @@ int main(){
     com.DeconnexionVSCOM(); 
     //com.FermerCOM();
     ServeurTCP serveur("0.0.0.0",8080);
-    cout<<"Le serveur est en écoute...."<<endl;
+    cout<<"Le serveur est en ecoute...."<<endl;
     while (true)
     {
         serveur.Envoyer(ReponseTCP,strlen(ReponseTCP));
         if(serveur.Recevoir(trameTCP,50)==-1){
             //cout<<"SOCKET : ERREUR"<<endl;
         }
-        cout<<trameTCP<<endl;
+        cout<<"Reception du client : "<<trameTCP<<endl;
         serveur.AttendreClient();
         serveur.Envoyer(ReponseTCP,strlen(ReponseTCP));
-        serveur.FermerCommunication();
+        
     }
-    
+    serveur.FermerCommunication();
 
     return 0;
 }

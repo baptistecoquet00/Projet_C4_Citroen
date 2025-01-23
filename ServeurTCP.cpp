@@ -78,12 +78,12 @@ bool ServeurTCP::AttendreClient(){
 	return true;
 }
 
-int ServeurTCP::Envoyer(char * message,int longueurDuMessage){
+int ServeurTCP::Envoyer(char message[],int longueurDuMessage){
     int nbOctet = send(m_SocketCommunication,message,longueurDuMessage,0);
     return nbOctet;
 }
 
-int ServeurTCP::Recevoir(char * reponse, int taille){
+int ServeurTCP::Recevoir(char reponse[], int taille){
     int OctetLus = recv(m_SocketCommunication,reponse,taille,0);
     return OctetLus;
 }
