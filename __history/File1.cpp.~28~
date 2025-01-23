@@ -1,0 +1,55 @@
+#include <iostream>
+#include <tchar.h>
+#include "ClientTCP.h"
+#include <fstream>
+#include <sstream>
+#include <string.h>
+#include <windows.h>
+
+using namespace std;
+int main(){
+	ClientTCP client;
+	char identifiant[10];
+	char reponse[50];
+
+	client.SeConnecterAUnServeur("172.20.21.45",4111);
+
+//	while (true) {
+//		cout<<"Ecrire l'identifiant souhaite :"<<endl;
+//		cin>>identifiant;
+//
+//		//Envoie fde l'identifiant
+//		client.Envoyer(identifiant,strlen(identifiant));
+//
+//		//Réception de la réponse
+//		client.Recevoir(reponse,50);
+//		cout<<reponse<<endl;
+//		Sleep(1000);
+//
+//		//cout<<identifiant;
+//		//Se connecter a nvx au serveur sinnon l'envoie ne fonctionne pas
+//		client.SeConnecterAUnServeur("172.20.21.45",4111);
+//	}
+
+	char idCAN[5]="115";
+	char longueur[1] = "4";
+	char canMessage[20]="8000000";
+
+	//Boucle pour savoir si le message s'envoi
+	if (client.Envoyer(idCAN,strlen(idCAN)) == -1) {
+		cout<<"Erreur lors de l'envoi du message."<<endl;
+	} else {
+		client.Envoyer(longueur,strlen(longueur));
+		client.Envoyer(canMessage,strlen(canMessage));
+		cout<<"IDCAN envoye : "<<idCAN<<endl;
+		cout<<"longueur envoye : "<<longueur<<endl;
+		cout<< "Message CAN envoye : "<<canMessage<<endl;
+	}
+	cin.get();
+
+//	char msg[5]="115";
+//	client.Envoyer(msg,strlen(msg));
+
+	return 0;
+}
+
