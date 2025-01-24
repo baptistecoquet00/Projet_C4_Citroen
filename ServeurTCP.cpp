@@ -88,6 +88,14 @@ int ServeurTCP::Recevoir(char reponse[], int taille){
     return OctetLus;
 }
 
+std::string ServeurTCP::RecevoirUnMessage(char reponse[], int longueurDuMessage)
+{
+	//char message[1500];
+	int nbOctets = recv(m_SocketCommunication, reponse, longueurDuMessage, 0);
+	std::string str(reponse, nbOctets);
+	return str;
+}
+
 void ServeurTCP::FermerCommunication(){
     close(m_SocketCommunication);
     //cout<<"Arret de la communication avec le client : OK"<<endl;

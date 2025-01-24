@@ -18,6 +18,7 @@ public:
     bool AttendreClient();
     int Envoyer(char message[], int longueurDuMessage);
     int Recevoir(char reponse[], int taille);
+    std::string RecevoirUnMessage(char reponse[], int longueurDuMessage);
     void FermerCommunication();
     void EteindreServeur();
 
