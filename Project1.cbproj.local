@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <Transactions>
+    <Transaction>2015/03/18 14:26:40.185,=C:\Users\diervese\Documents\Embarcadero\Studio\Projets\Project1PCH1.h</Transaction>
+    <Transaction>2015/03/18 14:26:40.205,=C:\Users\diervese\Documents\Embarcadero\Studio\Projets\Unit1.cpp</Transaction>
+    <Transaction>2015/03/18 14:43:02.708,C:\Users\diervese\Desktop\ClientServeurDeTest\Unit1.h=C:\Users\diervese\Documents\Embarcadero\Studio\Projets\Unit1.h</Transaction>
+    <Transaction>2015/03/18 14:43:02.708,C:\Users\diervese\Desktop\ClientServeurDeTest\Unit1.dfm=C:\Users\diervese\Documents\Embarcadero\Studio\Projets\Unit1.dfm</Transaction>
+    <Transaction>2015/03/18 14:43:02.708,C:\Users\diervese\Desktop\ClientServeurDeTest\Unit1.cpp=C:\Users\diervese\Documents\Embarcadero\Studio\Projets\Unit1.cpp</Transaction>
+    <Transaction>2015/03/18 14:43:04.383,C:\Users\diervese\Desktop\ClientServeurDeTest\Project1PCH1.h=C:\Users\diervese\Documents\Embarcadero\Studio\Projets\Project1PCH1.h</Transaction>
+    <Transaction>2015/03/18 14:43:06.053,C:\Users\diervese\Desktop\ClientServeurDeTest\Project1.cbproj=C:\Users\diervese\Documents\Embarcadero\Studio\Projets\Project1.cbproj</Transaction>
+  </Transactions>
+</BorlandProject>
