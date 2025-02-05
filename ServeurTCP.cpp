@@ -78,14 +78,41 @@ bool ServeurTCP::AttendreClient(){
 	return true;
 }
 
-int ServeurTCP::Envoyer(char * message,int longueurDuMessage){
+int ServeurTCP::Envoyer(char message[],int longueurDuMessage){
     int nbOctet = send(m_SocketCommunication,message,longueurDuMessage,0);
     return nbOctet;
 }
 
-int ServeurTCP::Recevoir(char * reponse, int taille){
+int ServeurTCP::Recevoir(char reponse[], int taille){
     int OctetLus = recv(m_SocketCommunication,reponse,taille,0);
     return OctetLus;
+}
+
+int ServeurTCP::Recevoir(char message[], int longueurMaxDuMessage,int timeout_us)
+{
+	fd_set fds;
+	int n;
+    struct timeval tv;
+	FD_ZERO(&fds);
+	FD_SET(m_SocketCommunication, &fds);
+	tv.tv_sec =  timeout_us/1000000;
+	tv.tv_usec = timeout_us%1000000;
+
+	n = select(m_SocketCommunication, &fds, NULL, NULL, &tv);
+    if(n==0)
+    {
+        //std::cout << "Timeout.." << std::endl;
+        return 0;
+    }
+    else if(n==-1)
+    {
+        //std::cout << "Error.." << std::endl;
+        return -1;
+	}
+	int nbOctets = recv(m_SocketCommunication, message, longueurMaxDuMessage, 0);
+	//string str(message, nbOctets);
+	//cout << "Message du client (" << nbOctets << " octets) : " << str << endl;
+	return nbOctets;
 }
 
 void ServeurTCP::FermerCommunication(){

@@ -16,8 +16,14 @@ SNPortSerie.o: SNPortSerie.h SNPortSerie.cpp
 ServeurTCP.o: ServeurTCP.h ServeurTCP.cpp
 	$(CC) $(CFLAGS) ServeurTCP.cpp
 
-Serveur: main.o VSCOM.o SNPortSerie.o ServeurTCP.o 
-	$(CC) main.o VSCOM.o SNPortSerie.o ServeurTCP.o -lpthread -o Serveur 
+SNIRconversions.o: SNIRconversions.h SNIRconversions.cpp
+	$(CC) $(CFLAGS) SNIRconversions.cpp
+
+MessageCAN.o: MessageCAN.h MessageCAN.cpp
+	$(CC) $(CFLAGS) MessageCAN.cpp
+
+Serveur: main.o VSCOM.o SNPortSerie.o ServeurTCP.o SNIRconversions.o MessageCAN.o
+	$(CC) main.o VSCOM.o SNPortSerie.o ServeurTCP.o MessageCAN.o SNIRconversions.o -lpthread -o Serveur 
 
 clean :
 	rm -f *.o Serveur

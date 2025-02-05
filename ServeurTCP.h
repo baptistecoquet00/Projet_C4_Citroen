@@ -16,8 +16,9 @@ private:
 public:
     ServeurTCP(std::string addresseIPServeur,unsigned short portServeur);
     bool AttendreClient();
-    int Envoyer(char *message, int longueurDuMessage);
-    int Recevoir(char * reponse, int taille);
+    int Envoyer(char message[], int longueurDuMessage);
+    int Recevoir(char reponse[], int taille);
+    int Recevoir(char message[], int longueurMaxDuMessage,int timeout_us);
     void FermerCommunication();
     void EteindreServeur();
 
