@@ -88,12 +88,31 @@ int ServeurTCP::Recevoir(char reponse[], int taille){
     return OctetLus;
 }
 
-std::string ServeurTCP::RecevoirUnMessage(char reponse[], int longueurDuMessage)
+int ServeurTCP::Recevoir(char message[], int longueurMaxDuMessage,int timeout_us)
 {
-	//char message[1500];
-	int nbOctets = recv(m_SocketCommunication, reponse, longueurDuMessage, 0);
-	std::string str(reponse, nbOctets);
-	return str;
+	fd_set fds;
+	int n;
+    struct timeval tv;
+	FD_ZERO(&fds);
+	FD_SET(m_SocketCommunication, &fds);
+	tv.tv_sec =  timeout_us/1000000;
+	tv.tv_usec = timeout_us%1000000;
+
+	n = select(m_SocketCommunication, &fds, NULL, NULL, &tv);
+    if(n==0)
+    {
+        //std::cout << "Timeout.." << std::endl;
+        return 0;
+    }
+    else if(n==-1)
+    {
+        //std::cout << "Error.." << std::endl;
+        return -1;
+	}
+	int nbOctets = recv(m_SocketCommunication, message, longueurMaxDuMessage, 0);
+	//string str(message, nbOctets);
+	//cout << "Message du client (" << nbOctets << " octets) : " << str << endl;
+	return nbOctets;
 }
 
 void ServeurTCP::FermerCommunication(){

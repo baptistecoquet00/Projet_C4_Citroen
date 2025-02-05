@@ -1,30 +1,36 @@
-#include <iostream>
+#pragma hdrstop
+#pragma argsused
+
+#ifdef _WIN32
+#include <tchar.h>
+#else
+  typedef char _TCHAR;
+  #define _tmain main
+#endif
 #include <stdio.h>
+#include <conio.h>
 #include "VSCOM.h"
-#include "ServeurTCP.h"
-typedef char _TCHAR;
-#define _tmain main
-
-using namespace std;
-
-int main(){
-    VSCOM vscom;
-    string leCOM="/dev/ttyUSB0";
-    ServeurTCP serveur("0.0.0.0",2025);
+#include "IRServeurTcpMonoclient.h"
+ int _tmain(int argc, _TCHAR* argv[]) 
+{   VSCOM vscom;
+	string leCOM;
+	IRServeurTcpMonoClient serveur;
+	serveur.Initialisation();
+	serveur.MettreEnEcouteSurLePort(2025);
 	DonneeCAN tabDonnees[2048];     //11 bits
 	int nbTrames[2048];
 	string tabDonneesFormatee[2048];
 	for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
 	bool OK=true;
+	cout<<"COM? [ex COM5] ";cin>>leCOM;
 	vscom.ModifierCOM(leCOM);
 	if(vscom.OuvrirCOM()) cout<<"Ouverture COM OK"<<endl;
 	else cout<<"Ouverture COM KO"<<endl;
-	char vitesse[10]="S4";
-	if(vscom.ConnexionVSCOM(vitesse)) cout<<"Connexion OK"<<endl;
+	if(vscom.ConnexionVSCOM("S4")) cout<<"Connexion OK"<<endl;
 	else {cout<<"Connexion KO"<<endl; OK=false;}
 	char message[1501];
 	cout<<"En attente du client..."<<endl;
-	serveur.AttendreClient();
+	serveur.AttendreUnNouveauClient();
 	while(OK)
 	{   DonneeCAN d=vscom.ReceptionTrameFormatee();
 		if(d.identifiant)
@@ -38,7 +44,7 @@ int main(){
 			sprintf(donnee,"%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X",d.donnee[0],d.donnee[1],d.donnee[2],d.donnee[3],d.donnee[4],d.donnee[5],d.donnee[6],d.donnee[7]);
 			sprintf(trameFormatee,"%.3X [ %d octets ] : %s",d.identifiant,d.longueur,donnee);
 			tabDonneesFormatee[d.identifiant]=trameFormatee;
-			//clrscr();
+			clrscr();
 			cout<<endl<<endl<<"=============================================="<<endl;
 			//"0B6 [ 8 octets ] : 5600160041547ED0"
 			for(int i=0;i<2048;i++)
@@ -56,10 +62,10 @@ int main(){
 			//cin.get();
 		}
 		//message du client
-		int nbOctets=serveur.Recevoir(message,1500,50000);
+		int nbOctets=serveur.RecevoirUnMessage(message,1500,50000);
 		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
 		{	message[nbOctets]=0;
-			//clrscr();
+			clrscr();
 			cout<<"Message du client : "<<message<<endl;
 			int id,r_long;unsigned char r_donnee[8]={3,4,5,6,7,8,9,10};
 			char r_donnees[30];
@@ -79,48 +85,21 @@ int main(){
 			}
 			else
 			{   if(id)
-					serveur.Envoyer((char*)tabDonneesFormatee[id].c_str(),tabDonneesFormatee[id].length());
+					serveur.EnvoyerUnMessage((char*)tabDonneesFormatee[id].c_str(),tabDonneesFormatee[id].length());
 				else
 					for(int i=0;i<2048;i++)
 					{	if(tabDonnees[i].identifiant)
-						{	serveur.Envoyer((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
+						{	serveur.EnvoyerUnMessage((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
 						}
 					}
 			}
-			//Sleep(2000);
+			Sleep(2000);
 		}
 	}
-	serveur.FermerCommunication();
+	serveur.FermerLaCommunicationAvecLeClient();
 	vscom.DeconnexionVSCOM();
 	vscom.FermerCOM();
-
-
-    // VSCOM com;
-	// char trameTCP[50];
-    // char ReponseTCP[20] ="I00000115R0L4";
-    // std::string repTCP="I00000115R0L4";
-
-    // com.ModifierCOM("/dev/ttyUSB0");
-    // if(com.OuvrirCOM()) cout<<"COM OUVERT"<<endl; else cout<<"ERREUR DE COM"<<endl;
-    // if(com.ConnexionVSCOM("S5")) cout<<"CONNEXION AU VSCOM"<<endl; else cout<<"ERREUR DE CONNEXION AU VSCOM"<<endl;    ;
-    // com.EnvoiTrameCAN(ReponseTCP); 
-    // cout<<"ENVOI DU MESSAGE : "<<ReponseTCP<<endl; 
-    // com.DeconnexionVSCOM(); 
-    
-    // com.FermerCOM();
-
-    // ServeurTCP serveur("0.0.0.0",8080);
-    // cout<<"Le serveur est en ecoute...."<<endl;
-    // while (true)
-    // {
-    //     int reception = serveur.Recevoir(trameTCP,strlen(ReponseTCP),1000);
-    //     cout<<"Reception du client : "<<reception<<endl;
-    //     serveur.AttendreClient();
-    //     serveur.Envoyer(ReponseTCP,strlen(ReponseTCP));
-    // }
-    // serveur.FermerCommunication();
-
-    return 0;
+	cin.get();
+	cin.get();
+	return 0;
 }
-
-
