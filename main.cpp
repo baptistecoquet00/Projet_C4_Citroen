@@ -57,6 +57,7 @@ void * ThreadServeur(void * pDataBis)
 		}
 	}	
 }
+
 int main(){
     
     string leCOM="/dev/ttyUSB0";
