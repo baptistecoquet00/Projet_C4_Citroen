@@ -51,7 +51,7 @@ public:
     int Recevoir(char message[], int longueurMaxDuMessage,int timeout_us);
     /*!
         @brief Méthode qui permet de recevoir le message du client.
-        @param reponse la réponse du client.
+        @param message la réponse du client.
         @param longueurMaxDuMessage permet de définir la longueur max du message à recevoir.
         @param timeout_us permet de mettre un time out en micro-seconde. 
         @return Cette méthode renvoie le nombre d'octets reçus. En cas d'échec, cette méthode renvoie 0 ou une valeur négative.
