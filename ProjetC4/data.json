@@ -1,0 +1,13 @@
+{
+  "can_id": "1A3F",
+  "descriptions": [
+    { "position": 0, "signification": "Température moteur" },
+    { "position": 1, "signification": "Vitesse du véhicule" },
+    { "position": 2, "signification": "Pression huile" },
+    { "position": 3, "signification": "Niveau carburant" },
+    { "position": 4, "signification": "Tension batterie" },
+    { "position": 5, "signification": "Consommation instantanée" },
+    { "position": 6, "signification": "Position pédale accélérateur" },
+    { "position": 7, "signification": "Régime moteur" }
+  ]
+}
