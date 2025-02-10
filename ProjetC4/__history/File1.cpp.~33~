@@ -1,0 +1,74 @@
+#include <iostream>
+#include <tchar.h>
+#include "ClientTCP.h"
+#include <fstream>
+#include <sstream>
+#include <string.h>
+#include <windows.h>
+
+using namespace std;
+int main(){
+	ClientTCP client;
+	char identifiant[10];
+	char reponse[50];
+
+	client.SeConnecterAUnServeur("172.20.21.20",2025);
+
+//	while (true) {
+//		cout<<"Ecrire l'identifiant souhaite :"<<endl;
+//		cin>>identifiant;
+//
+//		//Envoie fde l'identifiant
+//		client.Envoyer(identifiant,strlen(identifiant));
+//
+//		//Réception de la réponse
+//		client.Recevoir(reponse,50);
+//		cout<<reponse<<endl;
+//
+//		//cout<<identifiant;
+//		//Se connecter a nvx au serveur sinnon l'envoie ne fonctionne pas
+//		client.SeConnecterAUnServeur("172.20.21.20",2025);
+//	}
+
+	char idCAN[4]="115";
+	char longueur[2] ="4";
+	char canMessage[20]="0800000000000000";
+
+
+	do
+	//Boucle pour savoir si le message s'envoi
+	if (client.Envoyer(idCAN,strlen(idCAN)) == -1) {
+		cout<<"Erreur lors de l'envoi du message."<<endl;
+	} else {
+		Sleep(1000);
+		client.Envoyer(idCAN,strlen(idCAN));
+		client.Envoyer(longueur,strlen(longueur));
+		client.Envoyer(canMessage,strlen(canMessage));
+		cout<<"IDCAN envoye : "<<idCAN<<endl;
+		cout<<"longueur envoye : "<<longueur<<endl;
+		cout<< "Message CAN envoye : "<<canMessage<<endl;
+		client.Recevoir(reponse,50);
+		cout<<reponse;
+		client.SeDeconnecter();
+	}
+	while (1) ;
+
+
+
+
+	//Envoyer message serveur direct
+//	int id,longueur;
+//	char donnees[30];
+//
+//	cout<<"Ecire la trame a envoyer : (ex 115 [4 octets] 080000000000)"<<endls;
+//	cin>>donnes;
+//
+//	if(strlen(donnees)>3 && donnees[4]=='[' && donnees[15]==']')
+//	{
+//
+//
+//	}
+	//cin.get();
+	return 0;
+}
+
