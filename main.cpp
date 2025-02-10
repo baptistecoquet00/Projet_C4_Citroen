@@ -1,19 +1,69 @@
 #include <iostream>
 #include <stdio.h>
+#include <pthread.h>
+#include <thread>
+#include <sys/time.h>
 #include "VSCOM.h"
 #include "ServeurTCP.h"
 typedef char _TCHAR;
 #define _tmain main
 
 using namespace std;
+VSCOM vscom;
+ServeurTCP serveur("0.0.0.0",2025);
+int nbTrames[2048];
+string tabDonneesFormatee[2048];
+DonneeCAN tabDonnees[2048];     //11 bits
+void * ThreadServeur(void * pDataBis)
+{	char message[1501];
+	while(true)
+	{	//message du client
+		int nbOctets=serveur.Recevoir(message,1500);
+		
+		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
+		{	message[nbOctets]=0;
+			cout<<message<<endl;
+			//clrscr();
+			
+			int id,r_long;unsigned char r_donnee[8]={3,4,5,6,7,8,9,10};
+			char r_donnees[30];
+			sscanf(message,"%X",&id);
+			//"115 [ 4 octets ] : 0800000000000000"
+			if(strlen(message)>3 && message[4]=='[' && message[15]==']')
+			{	sscanf(message,"%X [ %d octets ] : %s",&id,&r_long,r_donnees);
+				//cout<<"="<<id<<"="<<r_long<<"="; //cout<<r_donnees<<endl;
+				for(int rd=0;rd<8;rd++) r_donnee[rd]=SNIR::ChaineHexaVersInt(r_donnees+2*rd,2);
+				//for(int rd=0;rd<8;rd++)cout<<(int)r_donnee[rd]<<" ";cout<<endl;
+				DonneeCAN donneeAEnvoyer;
+				donneeAEnvoyer.identifiant=id;
+				donneeAEnvoyer.longueur=r_long;
+				donneeAEnvoyer.requete=false;
+				for(int rd=0;rd<8;rd++) donneeAEnvoyer.donnee[rd]=r_donnee[rd];
+				vscom.EnvoiTrameCAN(donneeAEnvoyer,true);
+				
+			}
+			else
+			{   if(id)
+					serveur.Envoyer((char*)tabDonneesFormatee[id].c_str(),tabDonneesFormatee[id].length());
+				else
+					for(int i=0;i<2048;i++)
+					{	if(tabDonnees[i].identifiant)
+						{	serveur.Envoyer((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
+						}
+					}
+				cout<<"Message du client : "<<tabDonneesFormatee<<endl;
+			}
+			//Sleep(2000);
+		}
+	}	
+}
 
 int main(){
-    VSCOM vscom;
+    
     string leCOM="/dev/ttyUSB0";
-    ServeurTCP serveur("0.0.0.0",2025);
-	DonneeCAN tabDonnees[2048];     //11 bits
-	int nbTrames[2048];
-	string tabDonneesFormatee[2048];
+    
+	
+
 	for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
 	bool OK=true;
 	vscom.ModifierCOM(leCOM);
@@ -22,9 +72,12 @@ int main(){
 	char vitesse[10]="S4";
 	if(vscom.ConnexionVSCOM(vitesse)) cout<<"Connexion OK"<<endl;
 	else {cout<<"Connexion KO"<<endl; OK=false;}
-	char message[1501];
+	
 	cout<<"En attente du client..."<<endl;
 	serveur.AttendreClient();
+	pthread_t thread_TCP;
+	pthread_create( & thread_TCP, NULL, ThreadServeur, NULL);
+
 	while(OK)
 	{   DonneeCAN d=vscom.ReceptionTrameFormatee();
 		if(d.identifiant)
@@ -46,7 +99,7 @@ int main(){
 				{	printf("%.3X ",tabDonnees[i].identifiant);
 					cout<<"\t"<<tabDonnees[i].longueur<<"\t";
 					for(int j=0;j<8;j++)
-					{   printf("%.2X ",tabDonnees[i].donnee[j]);
+					{ printf("%.2X ",tabDonnees[i].donnee[j]);
 					}
 					cout<<" nb : "<<nbTrames[i];
 					cout<<endl;
@@ -55,46 +108,14 @@ int main(){
 			cout<<"=============================================="<<endl<<endl<<endl;
 			//cin.get();
 		}
-		//message du client
-		int nbOctets=serveur.Recevoir(message,1500,50000);
-		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
-		{	message[nbOctets]=0;
-			//clrscr();
-			cout<<"Message du client : "<<message<<endl;
-			int id,r_long;unsigned char r_donnee[8]={3,4,5,6,7,8,9,10};
-			char r_donnees[30];
-			sscanf(message,"%X",&id);
-			//"115 [ 4 octets ] : 0800000000000000"
-			if(strlen(message)>3 && message[4]=='[' && message[15]==']')
-			{	sscanf(message,"%X [ %d octets ] : %s",&id,&r_long,r_donnees);
-				//cout<<"="<<id<<"="<<r_long<<"="; //cout<<r_donnees<<endl;
-				for(int rd=0;rd<8;rd++) r_donnee[rd]=SNIR::ChaineHexaVersInt(r_donnees+2*rd,2);
-				//for(int rd=0;rd<8;rd++)cout<<(int)r_donnee[rd]<<" ";cout<<endl;
-				DonneeCAN donneeAEnvoyer;
-				donneeAEnvoyer.identifiant=id;
-				donneeAEnvoyer.longueur=r_long;
-				donneeAEnvoyer.requete=false;
-				for(int rd=0;rd<8;rd++) donneeAEnvoyer.donnee[rd]=r_donnee[rd];
-				vscom.EnvoiTrameCAN(donneeAEnvoyer,true);
-			}
-			else
-			{   if(id)
-					serveur.Envoyer((char*)tabDonneesFormatee[id].c_str(),tabDonneesFormatee[id].length());
-				else
-					for(int i=0;i<2048;i++)
-					{	if(tabDonnees[i].identifiant)
-						{	serveur.Envoyer((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
-						}
-					}
-			}
-			//Sleep(2000);
-		}
 	}
 	serveur.FermerCommunication();
 	vscom.DeconnexionVSCOM();
 	vscom.FermerCOM();
 
 
+
+	//cout<<"Reception des octets du client : "<<nbOctets<<endl;
     // VSCOM com;
 	// char trameTCP[50];
     // char ReponseTCP[20] ="I00000115R0L4";
