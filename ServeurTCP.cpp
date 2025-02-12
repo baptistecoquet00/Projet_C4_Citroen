@@ -60,6 +60,14 @@ void ServeurTCP::InitialisationSocket(){
     cout << "Creation de la socket d'ecoute : OK." << endl;
 }
 
+std::string getAddrIPServeur(){
+    return m_adresseIPServeur;
+}
+
+unsigned short getPortServeur(){
+    return m_portServeur;
+}
+
 bool ServeurTCP::AttendreClient(){
     if(m_SocketEcoute == -1)
 	{

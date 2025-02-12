@@ -8,10 +8,10 @@ class ServeurTCP
 {
 private:
 
-    unsigned short portServeur;
+    unsigned short m_portServeur;
     //! Port Serveur
     /*! Attribut permettant de mettre le numéro du port du Serveur sur 16 Bits*/
-    std::string adresseIPServeur;
+    std::string m_adresseIPServeur;
     //! Adresse IP Serveur
     /*!Chaine de caractère permettant d'écrire l'adresse ip sur laquelle écoute le serveur */
     int m_SocketEcoute;
@@ -38,6 +38,16 @@ public:
     ServeurTCP(std::string addresseIPServeur,unsigned short portServeur);
     /*!
         @brief Constructeur qui permet de lancer le serveur.
+    */
+    std::string getAddrIPServeur();
+    /*!
+        @brief Méthode permettant d'accéder à la valeur de l'adresse du Serveur
+        @return renvoie l'adresse Ip du Serveur
+    */
+    unsigned short getPortServeur();
+    /*!
+        @brief Méthode permettant d'accéder à la valeur du Port du Serveur
+        @return renvoie le port du Serveur
     */
     bool AttendreClient();
     /*!
