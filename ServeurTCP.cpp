@@ -20,14 +20,14 @@ using namespace std;
 
 ServeurTCP::ServeurTCP(string adresseIPServeur,unsigned short portServeur)
 {
-    string m_adresseIPServeur = adresseIPServeur;
-    unsigned short m_portServeur = portServeur;
+    m_adresseIPServeur = adresseIPServeur;
+    m_portServeur = portServeur;
     DemarrerServeur(m_adresseIPServeur,m_portServeur);
 }
 
 bool ServeurTCP::DemarrerServeur(string adresseIPServeur,unsigned short portServeur){
-    string m_adresseIPServeur = adresseIPServeur;
-    unsigned short m_portServeur = portServeur;
+    m_adresseIPServeur = adresseIPServeur;
+    m_portServeur = portServeur;
     InitialisationSocket();
 
     struct sockaddr_in clientARecevoir;

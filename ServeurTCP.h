@@ -7,11 +7,20 @@
 class ServeurTCP
 {
 private:
+
     unsigned short portServeur;
+    //! Port Serveur
+    /*! Attribut permettant de mettre le numéro du port du Serveur sur 16 Bits*/
     std::string adresseIPServeur;
+    //! Adresse IP Serveur
+    /*!Chaine de caractère permettant d'écrire l'adresse ip sur laquelle écoute le serveur */
     int m_SocketEcoute;
+    //! Socket Ecoute
+    /*!entier permettant de savoir sur qu'elle socket écoutera le serveur*/
     int m_SocketCommunication;
-    
+    //! Socket Communication
+    /*!entier permettant  de savoir sur qu'elle socket de communication le serveur communiquera*/
+
     bool DemarrerServeur(std::string addresseIPServeur,unsigned short portServeur);
     /*! 
         @brief Méthode privée permettant de Demarrer un Serveur TCP.
@@ -23,6 +32,7 @@ private:
     /*!
         @brief Méthode privée permettant d'initialiser la socket de communication.
     */
+
 public:
     
     ServeurTCP(std::string addresseIPServeur,unsigned short portServeur);
