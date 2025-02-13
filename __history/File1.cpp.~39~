@@ -1,0 +1,40 @@
+#include <iostream>
+#include <tchar.h>
+#include "ClientTCP.h"
+#include <fstream>
+#include <sstream>
+#include <string.h>
+#include <windows.h>
+
+using namespace std;
+int main(){
+
+	ClientTCP client;
+	char identifiant[10];
+	char reponse[50];
+	client.SeConnecterAUnServeur("172.20.21.20",2025);
+
+	//client.SeConnecterAUnServeur("172.20.21.20",2025);
+	cout<<"Ecrire l'identifiant souhaite :"<<endl;
+	cin>>identifiant;
+
+	//Envoie fde l'identifiant
+	client.Envoyer(identifiant,strlen(identifiant));
+
+	//Réception de la réponse
+	client.Recevoir(reponse,50);
+	cout<<reponse<<endl;
+
+	//Envoyer message serveur direct
+	while (true)
+	{
+		char donnees[30];
+		cout<<"Ecire la trame a envoyer : (ex 115 [ 4 octets ] : 0800000000000000)"<<endl;
+		cin.getline(donnees,1000);
+		client.Envoyer(donnees);
+		cin.get();
+	}
+
+	return 0;
+}
+
