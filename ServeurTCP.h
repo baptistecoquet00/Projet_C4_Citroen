@@ -25,7 +25,7 @@ private:
     /*! 
         @brief Méthode privée permettant de Demarrer un Serveur TCP.
         @param adresseIPServeur l'adresse Ip du Serveur à joindre.
-        @param le numéro du port du serveur à joindre.
+        @param portServeur le numéro du port du serveur à joindre.
         @return cette méthode renvoie true si l'association du port et la mise en écoute est OK.
     */
     void InitialisationSocket();

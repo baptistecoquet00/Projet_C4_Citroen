@@ -60,11 +60,11 @@ void ServeurTCP::InitialisationSocket(){
     cout << "Creation de la socket d'ecoute : OK." << endl;
 }
 
-std::string getAddrIPServeur(){
+std::string ServeurTCP::getAddrIPServeur(){
     return m_adresseIPServeur;
 }
 
-unsigned short getPortServeur(){
+unsigned short ServeurTCP::getPortServeur(){
     return m_portServeur;
 }
 
