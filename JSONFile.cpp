@@ -22,18 +22,23 @@ void JSONFile::AjouterDonneesJSON(std::string message,int idCAN,int lenData,int 
     int position = 1;
 
     do{
-        message+="idCAN\":";
-        message += idCAN;
-        message +="\"lenData\":";
-        message +=lenData;
-        message += "\"Data\":";
-        message += Data;
-        // if(position>=0){
-        //     position = message.insert(position+1,"{\"idCAN\":");
-        //     message.insert(position+2,idCAN);
-        //     message.insert
+        // message+="idCAN\":";
+        // message += idCAN;
+        // message +="\"lenData\":";
+        // message +=lenData;
+        // message += "\"Data\":";
+        // message += Data;
+        if(position>=0){
+            position = message.insert(position+1,"{\"idCAN\":");
+            message.insert(position+2,idCAN);
+            message.insert(position+1,",")
+            message.insert(position+1,"\"lenData\":");
+            message.insert(position+1,lenData);
+            message.insert(position+1,",");
+            message.insert(position+1,"\"Data\":");
+            message.insert(position+1,Data);
 
-        // }
+        }
         position++;
         if(position==""){
             position = -1;
@@ -45,7 +50,7 @@ void JSONFile::AjouterDonneesJSON(std::string message,int idCAN,int lenData,int 
 
 void JSONFile::CloreJSON(){
     leJSON.erase(leJSON.length()-1,1);
-    leJSON += "}]}";
+    leJSON += "]}";
     busCAN<<leJSON<<std::endl;
     busCAN.close();
 }
