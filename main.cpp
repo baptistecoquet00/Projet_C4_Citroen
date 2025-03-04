@@ -112,35 +112,6 @@ int main(){
 	serveur.FermerCommunication();
 	vscom.DeconnexionVSCOM();
 	vscom.FermerCOM();
-
-
-
-	//cout<<"Reception des octets du client : "<<nbOctets<<endl;
-    // VSCOM com;
-	// char trameTCP[50];
-    // char ReponseTCP[20] ="I00000115R0L4";
-    // std::string repTCP="I00000115R0L4";
-
-    // com.ModifierCOM("/dev/ttyUSB0");
-    // if(com.OuvrirCOM()) cout<<"COM OUVERT"<<endl; else cout<<"ERREUR DE COM"<<endl;
-    // if(com.ConnexionVSCOM("S5")) cout<<"CONNEXION AU VSCOM"<<endl; else cout<<"ERREUR DE CONNEXION AU VSCOM"<<endl;    ;
-    // com.EnvoiTrameCAN(ReponseTCP); 
-    // cout<<"ENVOI DU MESSAGE : "<<ReponseTCP<<endl; 
-    // com.DeconnexionVSCOM(); 
-    
-    // com.FermerCOM();
-
-    // ServeurTCP serveur("0.0.0.0",8080);
-    // cout<<"Le serveur est en ecoute...."<<endl;
-    // while (true)
-    // {
-    //     int reception = serveur.Recevoir(trameTCP,strlen(ReponseTCP),1000);
-    //     cout<<"Reception du client : "<<reception<<endl;
-    //     serveur.AttendreClient();
-    //     serveur.Envoyer(ReponseTCP,strlen(ReponseTCP));
-    // }
-    // serveur.FermerCommunication();
-
     return 0;
 }
 
