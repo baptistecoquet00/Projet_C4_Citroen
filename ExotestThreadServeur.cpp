@@ -2,6 +2,8 @@
 
 ExotestThreadServeur::ExotestThreadServeur(std::string adresseIPServeur,unsigned short portServeur,std::string leCOM){
     ServeurTCP serveur(adresseIPServeur,portServeur);
+	OuvertureConnexionVSCOM(leCOM,vitesse);
+	InitialisationDonneeZero(m_tabDonnees,m_nbTrames);
 }
 
 void ExotestThreadServeur::InitialisationDonneeZero(DonneeCAN tabDonnees[2048],int nbTrames[2048]){
@@ -86,7 +88,6 @@ static void * ExotestThreadServeur::ThreadServeur(void * pDataBis)
 		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
 		{	message[nbOctets]=0;
 			cout<<message<<endl;
-			//clrscr();
 			
 			int id,r_long;unsigned char r_donnee[8]={3,4,5,6,7,8,9,10};
 			char r_donnees[30];
@@ -94,9 +95,7 @@ static void * ExotestThreadServeur::ThreadServeur(void * pDataBis)
 			//"115 [ 4 octets ] : 0800000000000000"
 			if(strlen(message)>3 && message[4]=='[' && message[15]==']')
 			{	sscanf(message,"%X [ %d octets ] : %s",&id,&r_long,r_donnees);
-				//cout<<"="<<id<<"="<<r_long<<"="; //cout<<r_donnees<<endl;
 				for(int rd=0;rd<8;rd++) r_donnee[rd]=SNIR::ChaineHexaVersInt(r_donnees+2*rd,2);
-				//for(int rd=0;rd<8;rd++)cout<<(int)r_donnee[rd]<<" ";cout<<endl;
 				DonneeCAN donneeAEnvoyer;
 				donneeAEnvoyer.identifiant=id;
 				donneeAEnvoyer.longueur=r_long;
@@ -116,7 +115,6 @@ static void * ExotestThreadServeur::ThreadServeur(void * pDataBis)
 					}
 				cout<<"Message du client : "<<tabDonneesFormatee<<endl;
 			}
-			//Sleep(2000);
 		}
 	}	
 }
