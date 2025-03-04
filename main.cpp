@@ -5,6 +5,7 @@
 #include <sys/time.h>
 #include "VSCOM.h"
 #include "ServeurTCP.h"
+#include "JSONFile.h"
 typedef char _TCHAR;
 #define _tmain main
 
@@ -14,6 +15,7 @@ ServeurTCP serveur("0.0.0.0",2025);
 int nbTrames[2048];
 string tabDonneesFormatee[2048];
 DonneeCAN tabDonnees[2048];     //11 bits
+
 void * ThreadServeur(void * pDataBis)
 {	char message[1501];
 	while(true)
@@ -38,7 +40,7 @@ void * ThreadServeur(void * pDataBis)
 				donneeAEnvoyer.identifiant=id;
 				donneeAEnvoyer.longueur=r_long;
 				donneeAEnvoyer.requete=false;
-				for(int rd=0;rd<8;rd++) donneeAEnvoyer.donnee[rd]=r_donnee[rd];
+				for(int rd=0;rd<8;rd++){donneeAEnvoyer.donnee[rd]=r_donnee[rd];} 
 				vscom.EnvoiTrameCAN(donneeAEnvoyer,true);
 				
 			}
@@ -62,7 +64,9 @@ int main(){
     
     string leCOM="/dev/ttyUSB0";
     
-	
+	string NomFichierJson = "CAN.json";
+	JSONFile json("TestUser",NomFichierJson);
+
 
 	for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
 	bool OK=true;
@@ -99,14 +103,20 @@ int main(){
 				{	printf("%.3X ",tabDonnees[i].identifiant);
 					cout<<"\t"<<tabDonnees[i].longueur<<"\t";
 					for(int j=0;j<8;j++)
-					{ printf("%.2X ",tabDonnees[i].donnee[j]);
+					{ 
+						printf("%.2X ",tabDonnees[i].donnee[j]);
+						json.AjouterDonneesJSON(message,tabDonnees[i].identifiant,tabDonnees[i].longueur,tabDonnees[i].donnee[j]);
+						
 					}
 					cout<<" nb : "<<nbTrames[i];
 					cout<<endl;
+					
 				}
 			}
 			cout<<"=============================================="<<endl<<endl<<endl;
+			
 			//cin.get();
+			
 		}
 	}
 	serveur.FermerCommunication();

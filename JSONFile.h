@@ -17,6 +17,5 @@ public:
     void DebuterJSON(std::string nomUtilisateur);
     void AjouterDonneesJSON(std::string message,int idCAN,int lenData,int Data);
     void CloreJSON();
-    ~JSONFile();
 };
 #endif
