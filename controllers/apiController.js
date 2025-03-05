@@ -1,4 +1,4 @@
-const rest = require('../requete/rest');
+const rest = require('../modele/rest');
 
 // GET /api/identifiants
 exports.getIdentifiants = async (req, res) => {
@@ -34,6 +34,44 @@ exports.getSignifications = async (req, res) => {
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
+
+exports.getSignificationsUnOctet = async (req, res) => {
+  const id = req.params.id;
+  const octet = req.params.octet;
+  // Vérification des paramètres (chiffres et lettres uniquement)
+  if (!/^[a-zA-Z0-9]+$/.test(id) || !/^\d+$/.test(octet)) {
+    return res.status(400).json({ error: "ID ou Octet invalide" });
+  }
+  try {
+    const significations = await rest.getSignificationsUnOctet(id, octet);
+    res.json(significations);
+  } catch (error) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+exports.PostTrame = async (req, res) => {
+  try {
+    //console.log(req.body.users);
+    const { users, data } = req.body; // Extraction des données du JSON
+    
+    // Vérifier si le JSON est valide
+    if (!users || !Array.isArray(data)) {
+      return res.status(400).json({ error: "Format JSON invalide" });
+    }
+    //console.log('pipi');
+    // Appel de la fonction dans `rest.js`
+   // console.log(req.body);
+    const response = await rest.PostTrame(req.body);
+    //console.log("caca");
+    res.json(response);
+
+  } catch (error) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+
 
 // GET /api/items/:id
 // exports.getItemById = async (req, res) => {
