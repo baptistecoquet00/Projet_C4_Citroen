@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2025/01/15 16:29:17.000.689,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1PCH1.h</Transaction>
+    <Transaction>2025/01/15 16:29:18.000.002,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Unit1.cpp</Transaction>
+    <Transaction>2025/01/17 08:44:07.000.693,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1PCH1.h</Transaction>
+    <Transaction>2025/01/17 08:44:07.000.702,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\File1.cpp</Transaction>
+    <Transaction>2025/01/17 08:44:48.000.157,C:\Users\achikhaoui\Desktop\ProjetC4\File1.cpp=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\File1.cpp</Transaction>
+    <Transaction>2025/01/17 08:44:48.000.840,C:\Users\achikhaoui\Desktop\ProjetC4\Project1PCH1.h=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1PCH1.h</Transaction>
+    <Transaction>2025/01/17 08:44:49.000.548,C:\Users\achikhaoui\Desktop\ProjetC4\Project1.cbproj=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1.cbproj</Transaction>
+    <Transaction>2025/01/17 08:45:11.000.948,=C:\Users\achikhaoui\Desktop\ProjetC4\ClientTCP.cpp</Transaction>
+    <Transaction>2025/01/17 08:45:11.000.952,=C:\Users\achikhaoui\Desktop\ProjetC4\ClientTCP.h</Transaction>
+  </Transactions>
+</BorlandProject>

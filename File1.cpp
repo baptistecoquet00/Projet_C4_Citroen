@@ -23,7 +23,7 @@ int main(){
 	switch (choix) {
 		case 1:
 			client.SeConnecterAUnServeur("172.20.21.9",2025);
-			cout<<"Ecrire l'identifiant souhaite :"<<endl;
+			cout<<"Ecrire l'identifiant souhaite ( 0 pour tout recevoir) :"<<endl;
 			cin>>identifiant;
 
 			//Envoie fde l'identifiant
@@ -33,6 +33,7 @@ int main(){
 			client.Recevoir(reponse,50);
 			cout<<reponse<<endl;
 			cin.get();
+			client.SeDeconnecter();
 		break;
 
 		case 2:
