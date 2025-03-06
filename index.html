@@ -10,19 +10,29 @@
     <nav class="menu">
         <ul>
             <li><a href="#accueil">Accueil</a></li>
-            <li><a href="#apropos">À Propos</a></li>
+            <li><a href="#graphique">Graphiques</a></li>
+            <li><a href="#apropos">À Propos</a></li>   
         </ul>
     </nav>
 
     <main>
-        <section id="accueil" class="active">
+        <section id="section1" class="active">
             <h1>Bienvenue sur notre site</h1>
-            <p>Le projet propose un système d'identification automatique des messages CAN permettant de suivre l'évolution des données dans un véhicule. Des graphs ainsi que la signification de chaque message sont accessible. On peut surveiller en temps réel certains messages CAN, et injecter des messages via le bus CAN dans le véhicule.</p>
+            <p>Le projet propose un système d'identification automatique des messages CAN permettant de suivre l'évolution des données dans un véhicule. Des graphs ainsi que la signification de chaque message sont accessible.</p>
+        </section>
+        <section id="section2" class="active">
+            <h1>Descriptif de la maquette</h1>
+            <p>La maquette représente un véhicule de dernière génération, avec des éléments de Citroën C4 (C5Restylée) et de Peugeot 307 « Full CAN ».
+                Sur cette maquette vous retrouverez les réseaux de communication du constructeur :
+                CAN High Speed, CAN Low Speed et LIN.
+                Cette maquette est livrée avec le logiciel MUXTRACE et un boîtier USB-MUX-4C2L pour la
+                visualisation, l’analyse et l’émission de trames sur les réseaux du système.</p>
+                <img src="maquette.PNG" class="section-image" title="Vue de la maquette utilisé">    
         </section>
 
         <section id="apropos">
             <h2>À Propos</h2>
-            <p>Ressources utilisés dans le projet :</p>
+            <p>Ressources utilisées dans le projet :</p>
             <ul>
                 <li>Maquette Exxotest</li>
                 <li>Rasbperry Pi</li>
@@ -32,6 +42,7 @@
                 <li>Embarcadero</li>
             </ul>
         </section>
+        
 
     </main>
 
