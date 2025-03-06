@@ -52,24 +52,45 @@ exports.getSignificationsUnOctet = async (req, res) => {
 
 exports.PostTrame = async (req, res) => {
   try {
-    //console.log(req.body.users);
+    console.log("📩 Requête reçue :", req.body);
+
     const { users, data } = req.body; // Extraction des données du JSON
-    
+
     // Vérifier si le JSON est valide
     if (!users || !Array.isArray(data)) {
       return res.status(400).json({ error: "Format JSON invalide" });
     }
-    //console.log('pipi');
-    // Appel de la fonction dans `rest.js`
-   // console.log(req.body);
+
+    // Appel de la fonction `PostTrame` depuis `rest.js`
     const response = await rest.PostTrame(req.body);
-    //console.log("caca");
-    res.json(response);
+
+    res.json({ message: "Trames CAN traitées avec succès !", details: response });
 
   } catch (error) {
+    console.error("❌ Erreur dans apiController :", error);
     res.status(500).json({ error: "Erreur serveur" });
   }
 };
+// exports.PostTrame = async (req, res) => {
+//   try {
+//     //console.log(req.body.users);
+//     const { users, data } = req.body; // Extraction des données du JSON
+    
+//     // Vérifier si le JSON est valide
+//     if (!users || !Array.isArray(data)) {
+//       return res.status(400).json({ error: "Format JSON invalide" });
+//     }
+//     //console.log('pipi');
+//     // Appel de la fonction dans `rest.js`
+//    // console.log(req.body);
+//     const response = await rest.PostTrame(req.body);
+//     //console.log("caca");
+//     res.json(response);
+
+//   } catch (error) {
+//     res.status(500).json({ error: "Erreur serveur" });
+//   }
+// };
 
 
 

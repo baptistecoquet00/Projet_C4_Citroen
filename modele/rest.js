@@ -37,44 +37,89 @@ exports.getSignificationsUnOctet = async (id, octet) => {
   }
 };
 
-exports.PostTrame = async (req, res) => {
+exports.PostTrame = async (body) => { // On récupère directement `body`
   try {
-    //console.log("Requête reçue :", req.body); // Ajoute ce log
-    //console.log(req);
-    const data = req.data;
+    const { users, data } = body; // Extraction des données
 
-    if (!Array.isArray(data)) {
-      return res.status(400).json({ error: "Format JSON invalide" });
+    // Vérification du format JSON
+    if (!users || !Array.isArray(data)) {
+      return { error: "Format JSON invalide" };
     }
-   // console.log("testoui");
+
     for (const trame of data) {
-     // console.log("debut");
-     // console.log(trame);
       let { idCAN, lenData, Data } = trame;
 
       if (!idCAN || !lenData || !Data || Data.toString().length !== 16) {
-        return res.status(400).json({ error: "Données CAN invalides" });
+        return { error: "Données CAN invalides" };
       }
 
       idCAN = idCAN.toUpperCase();
       const octets = Data.toString().match(/.{2}/g);
-       // console.log("envoiereq");
-      const query = `
+
+      // Vérifier si l'identifiant existe déjà dans `identifiants_can`
+      const checkQuery = `SELECT COUNT(*) FROM identifiants_can WHERE can_id = $1`;
+      const checkResult = await db.query(checkQuery, [idCAN]);
+
+      if (checkResult.rows[0].count == 0) {
+        // Ajouter l'identifiant s'il n'existe pas
+        const insertIdentifiantQuery = `INSERT INTO identifiants_can (can_id) VALUES ($1)`;
+        await db.query(insertIdentifiantQuery, [idCAN]);
+      }
+
+      // Insérer la trame dans `trames_can`
+      const insertTrameQuery = `
         INSERT INTO trames_can (can_id, horodatage, octet_0, octet_1, octet_2, octet_3, octet_4, octet_5, octet_6, octet_7)
         VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)
       `;
 
-      await db.query(query, [idCAN, ...octets]);
-      //console.log("requetefinit");
+      await db.query(insertTrameQuery, [idCAN, ...octets]);
     }
 
-    return(  "Trames CAN insérées avec succès !" );
+    return { message: "Trames CAN insérées avec succès !" };
 
   } catch (error) {
     console.error("Erreur lors de l'insertion des trames CAN :", error);
-    res.status(500).json({ error: "Erreur serveur" });
+    return { error: "Erreur serveur" };
   }
 };
+// exports.PostTrame = async (req, res) => {
+//   try {
+//     //console.log("Requête reçue :", req.body); // Ajoute ce log
+//     //console.log(req);
+//     const data = req.data;
+
+//     if (!Array.isArray(data)) {
+//       return res.status(400).json({ error: "Format JSON invalide" });
+//     }
+//    // console.log("testoui");
+//     for (const trame of data) {
+//      // console.log("debut");
+//      // console.log(trame);
+//       let { idCAN, lenData, Data } = trame;
+
+//       if (!idCAN || !lenData || !Data || Data.toString().length !== 16) {
+//         return res.status(400).json({ error: "Données CAN invalides" });
+//       }
+
+//       idCAN = idCAN.toUpperCase();
+//       const octets = Data.toString().match(/.{2}/g);
+//        // console.log("envoiereq");
+//       const query = `
+//         INSERT INTO trames_can (can_id, horodatage, octet_0, octet_1, octet_2, octet_3, octet_4, octet_5, octet_6, octet_7)
+//         VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)
+//       `;
+
+//       await db.query(query, [idCAN, ...octets]);
+//       //console.log("requetefinit");
+//     }
+
+//     return(  "Trames CAN insérées avec succès !" );
+
+//   } catch (error) {
+//     console.error("Erreur lors de l'insertion des trames CAN :", error);
+//     res.status(500).json({ error: "Erreur serveur" });
+//   }
+// };
 // Récupérer un item par ID
 // exports.getById = async (id) => {
 //   const [rows] = await db.promise().query('SELECT * FROM  WHERE id = ?', [id]);
