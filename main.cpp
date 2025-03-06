@@ -3,6 +3,8 @@
 #include <pthread.h>
 #include <thread>
 #include <sys/time.h>
+#include <mutex>
+
 #include "VSCOM.h"
 #include "ServeurTCP.h"
 #include "JSONFile.h"
@@ -11,15 +13,17 @@ typedef char _TCHAR;
 
 using namespace std;
 VSCOM vscom;
-ServeurTCP serveur("0.0.0.0",2025);
+ServeurTCP serveur("0.0.0.0",2085);
 int nbTrames[2048];
 string tabDonneesFormatee[2048];
 DonneeCAN tabDonnees[2048];     //11 bits
+mutex mtx;
 
 void * ThreadServeur(void * pDataBis)
 {	char message[1501];
 	while(true)
 	{	//message du client
+		//lock_guard<std::mutex> guard(mtx);
 		int nbOctets=serveur.Recevoir(message,1500);
 		
 		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
@@ -61,11 +65,10 @@ void * ThreadServeur(void * pDataBis)
 }
 
 int main(){
-    
+    //std::ofstream f; f.open("tooto.txt"); f<<"test";f.close();
     string leCOM="/dev/ttyUSB0";
-    
-	string NomFichierJson = "CAN.json";
-	JSONFile json("TestUser",NomFichierJson);
+	JSONFile json;//"TestUser","CAN.json");
+	string message;
 
 
 	for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
@@ -81,6 +84,8 @@ int main(){
 	serveur.AttendreClient();
 	pthread_t thread_TCP;
 	pthread_create( & thread_TCP, NULL, ThreadServeur, NULL);
+	//pthread_join(thread_TCP, nullptr);
+
 
 	while(OK)
 	{   DonneeCAN d=vscom.ReceptionTrameFormatee();
@@ -105,7 +110,7 @@ int main(){
 					for(int j=0;j<8;j++)
 					{ 
 						printf("%.2X ",tabDonnees[i].donnee[j]);
-						json.AjouterDonneesJSON(message,tabDonnees[i].identifiant,tabDonnees[i].longueur,tabDonnees[i].donnee[j]);
+						//json.AjouterDonneesJSON(message,tabDonnees[i].identifiant,tabDonnees[i].longueur,tabDonnees[i].donnee[j]);
 						
 					}
 					cout<<" nb : "<<nbTrames[i];

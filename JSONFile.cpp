@@ -1,20 +1,22 @@
 #include "JSONFile.h"
 
-JSONFile::JSONFile(std::string nomUtilisateur,std::string nomFichier){
-    creerJSON(nomFichier);
-    DebuterJSON(nomUtilisateur);
+JSONFile::JSONFile(){
+    creerJSON();
+    DebuterJSON();
 }
 
-std::string JSONFile::creerJSON(std::string nomFichier){
-    busCAN.open(nomFichier);
+std::string JSONFile::creerJSON(){
+    busCAN.open("CAN.json");
+    //busCAN<<"test"; busCAN.close();
+
 }
 
-void JSONFile::DebuterJSON(std::string nomUtilisateur){
+void JSONFile::DebuterJSON(){
     // stringstream stimestamp;
     // int timestamp = (int)time(NULL);
     // stimestamp<<timestamp;
-
-    leJSON = "{ \"nomUtilisateur\" : \"" + nomUtilisateur + "\", \" data \" : [";
+    //std::string nomUtilisateur="Test";
+    leJSON = "{ \"nomUtilisateur\" : \"Test \", \" data \" : [";
 }
 
 void JSONFile::AjouterDonneesJSON(std::string message,int idCAN,int lenData,int Data){
