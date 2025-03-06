@@ -3,21 +3,27 @@
 #include <pthread.h>
 #include <thread>
 #include <sys/time.h>
+#include <mutex>
+
 #include "VSCOM.h"
 #include "ServeurTCP.h"
+#include "JSONFile.h"
 typedef char _TCHAR;
 #define _tmain main
 
 using namespace std;
 VSCOM vscom;
-ServeurTCP serveur("0.0.0.0",2025);
+ServeurTCP serveur("0.0.0.0",2085);
 int nbTrames[2048];
 string tabDonneesFormatee[2048];
 DonneeCAN tabDonnees[2048];     //11 bits
+mutex mtx;
+
 void * ThreadServeur(void * pDataBis)
 {	char message[1501];
 	while(true)
 	{	//message du client
+		//lock_guard<std::mutex> guard(mtx);
 		int nbOctets=serveur.Recevoir(message,1500);
 		
 		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
@@ -38,7 +44,7 @@ void * ThreadServeur(void * pDataBis)
 				donneeAEnvoyer.identifiant=id;
 				donneeAEnvoyer.longueur=r_long;
 				donneeAEnvoyer.requete=false;
-				for(int rd=0;rd<8;rd++) donneeAEnvoyer.donnee[rd]=r_donnee[rd];
+				for(int rd=0;rd<8;rd++){donneeAEnvoyer.donnee[rd]=r_donnee[rd];} 
 				vscom.EnvoiTrameCAN(donneeAEnvoyer,true);
 				
 			}
@@ -59,10 +65,11 @@ void * ThreadServeur(void * pDataBis)
 }
 
 int main(){
-    
+    //std::ofstream f; f.open("tooto.txt"); f<<"test";f.close();
     string leCOM="/dev/ttyUSB0";
-    
-	
+	JSONFile json;//"TestUser","CAN.json");
+	string message;
+
 
 	for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
 	bool OK=true;
@@ -77,6 +84,8 @@ int main(){
 	serveur.AttendreClient();
 	pthread_t thread_TCP;
 	pthread_create( & thread_TCP, NULL, ThreadServeur, NULL);
+	//pthread_join(thread_TCP, nullptr);
+
 
 	while(OK)
 	{   DonneeCAN d=vscom.ReceptionTrameFormatee();
@@ -99,48 +108,25 @@ int main(){
 				{	printf("%.3X ",tabDonnees[i].identifiant);
 					cout<<"\t"<<tabDonnees[i].longueur<<"\t";
 					for(int j=0;j<8;j++)
-					{ printf("%.2X ",tabDonnees[i].donnee[j]);
+					{ 
+						printf("%.2X ",tabDonnees[i].donnee[j]);
+						//json.AjouterDonneesJSON(message,tabDonnees[i].identifiant,tabDonnees[i].longueur,tabDonnees[i].donnee[j]);
+						
 					}
 					cout<<" nb : "<<nbTrames[i];
 					cout<<endl;
+					
 				}
 			}
 			cout<<"=============================================="<<endl<<endl<<endl;
+			
 			//cin.get();
+			
 		}
 	}
 	serveur.FermerCommunication();
 	vscom.DeconnexionVSCOM();
 	vscom.FermerCOM();
-
-
-
-	//cout<<"Reception des octets du client : "<<nbOctets<<endl;
-    // VSCOM com;
-	// char trameTCP[50];
-    // char ReponseTCP[20] ="I00000115R0L4";
-    // std::string repTCP="I00000115R0L4";
-
-    // com.ModifierCOM("/dev/ttyUSB0");
-    // if(com.OuvrirCOM()) cout<<"COM OUVERT"<<endl; else cout<<"ERREUR DE COM"<<endl;
-    // if(com.ConnexionVSCOM("S5")) cout<<"CONNEXION AU VSCOM"<<endl; else cout<<"ERREUR DE CONNEXION AU VSCOM"<<endl;    ;
-    // com.EnvoiTrameCAN(ReponseTCP); 
-    // cout<<"ENVOI DU MESSAGE : "<<ReponseTCP<<endl; 
-    // com.DeconnexionVSCOM(); 
-    
-    // com.FermerCOM();
-
-    // ServeurTCP serveur("0.0.0.0",8080);
-    // cout<<"Le serveur est en ecoute...."<<endl;
-    // while (true)
-    // {
-    //     int reception = serveur.Recevoir(trameTCP,strlen(ReponseTCP),1000);
-    //     cout<<"Reception du client : "<<reception<<endl;
-    //     serveur.AttendreClient();
-    //     serveur.Envoyer(ReponseTCP,strlen(ReponseTCP));
-    // }
-    // serveur.FermerCommunication();
-
     return 0;
 }
 

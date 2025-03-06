@@ -12,11 +12,10 @@ private:
     std::string leJSON;
     std::ofstream busCAN;
 public:
-    JSONFile(std::string nomUtilisateur,std::string nomFichier);
-    std::string creerJSON(std::string nomFichier);
-    void DebuterJSON(std::string nomUtilisateur);
+    JSONFile();
+    std::string creerJSON();
+    void DebuterJSON();
     void AjouterDonneesJSON(std::string message,int idCAN,int lenData,int Data);
     void CloreJSON();
-    ~JSONFile();
 };
 #endif
