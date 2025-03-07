@@ -22,7 +22,7 @@ int main(){
 	cin.get();
 	switch (choix) {
 		case 1:
-			client.SeConnecterAUnServeur("172.20.21.9",2025);
+			client.SeConnecterAUnServeur("172.20.21.9",2085);
 			cout<<"Ecrire l'identifiant souhaite ( 0 pour tout recevoir) :"<<endl;
 			cin>>identifiant;
 
@@ -37,7 +37,7 @@ int main(){
 		break;
 
 		case 2:
-			client.SeConnecterAUnServeur("172.20.21.9",2025);
+			client.SeConnecterAUnServeur("172.20.21.9",2085);
 			//Envoyer message serveur direct
 			while (true)
 			{
@@ -63,14 +63,58 @@ int main(){
 			client.SeDeconnecter();
 			ofstream fichier("data.json");
 			if (!fichier) {
-			cout << "Erreur: impossible d'ouvrir le fichier" << endl;
-			system("pause");
-			return 1;
+				cout << "Erreur: impossible d'ouvrir le fichier" << endl;
+				system("pause");
+				return 1;
 			}
+
 			fichier<<json;
 			fichier.close();
 
-		break;
+			string jsonn="";
+			ifstream f;
+			f.open("data.json");
+			string id,description;
+			int numOctet;
+			int positionID,positionOctet,positionSignification,debutDescription,finDescription;
+			char ligne[1000];
+			if(f.is_open())
+			{   do
+				{	f.getline(ligne,1000);
+					cout<<ligne<<endl;
+					jsonn+=ligne;
+				}while(!f.eof());
+				f.close();
+			}
+			cout<<jsonn<<endl;
+			while(1)
+			{   cin>>id;
+				cin>>numOctet;
+				positionID=0;positionOctet=0;positionSignification=0;debutDescription=0;finDescription=0;
+				positionID=jsonn.find(id,0);
+				if(positionID!=-1)
+				{   stringstream octetEtnum;
+					octetEtnum<<"\"octet\":";
+					octetEtnum<<numOctet;
+					positionOctet=jsonn.find(octetEtnum.str(),positionID);
+					if(positionOctet!=-1)
+					{   positionSignification=jsonn.find("signification",positionOctet);
+						if(positionSignification!=-1)
+						{   debutDescription=jsonn.find("\"",positionSignification+15);
+							if(debutDescription!=1)
+							{	finDescription=jsonn.find("\"",debutDescription+1);
+								if(finDescription!=1)
+								{   description=jsonn.substr(debutDescription+1,finDescription-debutDescription-1);
+									cout<<description<<endl;
+								} else cout<<"no fin"<<endl;
+							} else cout<<"no debut"<<endl;
+						} else cout<<"no signification"<<endl;
+					} else cout<<"no octet"<<endl;
+				}
+				else cout<<"ID absent"<<endl;
+			}
+			cin.get();
+			break;
 	}
 	cin.get();
 	return 0;
