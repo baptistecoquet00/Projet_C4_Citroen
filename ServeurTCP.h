@@ -76,6 +76,7 @@ public:
         @param timeout_us permet de mettre un time out en micro-seconde. 
         @return Cette méthode renvoie le nombre d'octets reçus. En cas d'échec, cette méthode renvoie 0 ou une valeur négative.
     */  
+    bool EstConnecte();
     void FermerCommunication();
     /*!
         @brief Méthode permettant de fermer la communication avec le client.

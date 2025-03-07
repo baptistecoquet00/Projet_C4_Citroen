@@ -12,17 +12,34 @@ typedef char _TCHAR;
 #define _tmain main
 
 using namespace std;
+
+
 VSCOM vscom;
 ServeurTCP serveur("0.0.0.0",2085);
 int nbTrames[2048];
 string tabDonneesFormatee[2048];
 DonneeCAN tabDonnees[2048];     //11 bits
-mutex mtx;
 
 void * ThreadServeur(void * pDataBis)
 {	char message[1501];
+	JSONFile json("TestUser","CAN.json");
+	string msg;
 	while(true)
 	{	//message du client
+		break;
+		if(serveur.EstConnecte()){
+			std::cout << "Comm fermé" << std::endl;
+			std::cin.get();
+			serveur.FermerCommunication();
+			vscom.DeconnexionVSCOM();
+			vscom.FermerCOM();
+			break;
+		}
+		else{
+			std::cout << "rien";
+			std::cin.get();
+			break;
+		}
 		//lock_guard<std::mutex> guard(mtx);
 		int nbOctets=serveur.Recevoir(message,1500);
 		
@@ -55,21 +72,30 @@ void * ThreadServeur(void * pDataBis)
 					for(int i=0;i<2048;i++)
 					{	if(tabDonnees[i].identifiant)
 						{	serveur.Envoyer((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
+							/*for(int j=0;j<8;j++)*/ json.AjouterDonneesJSON("", 123, 456, 789); //json.AjouterDonneesJSON(msg,tabDonnees[i].identifiant,tabDonnees[i].longueur,tabDonnees[i].donnee[j]);
 						}
 					}
 				cout<<"Message du client : "<<tabDonneesFormatee<<endl;
 			}
+
+			
 			//Sleep(2000);
 		}
-	}	
+
+		
+	}
+	json.CloreJSON();	
 }
 
 int main(){
     //std::ofstream f; f.open("tooto.txt"); f<<"test";f.close();
     string leCOM="/dev/ttyUSB0";
-	JSONFile json;//"TestUser","CAN.json");
-	string message;
+	
 
+	// std::cout << "Creer" << std::endl ;
+	// json.creerJSON();
+	// std::cout << "Créé" << std::endl ;
+	// json.DebuterJSON();
 
 	for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
 	bool OK=true;
@@ -82,7 +108,11 @@ int main(){
 	
 	cout<<"En attente du client..."<<endl;
 	serveur.AttendreClient();
+	
+	
 	pthread_t thread_TCP;
+	
+	
 	pthread_create( & thread_TCP, NULL, ThreadServeur, NULL);
 	//pthread_join(thread_TCP, nullptr);
 
@@ -110,7 +140,6 @@ int main(){
 					for(int j=0;j<8;j++)
 					{ 
 						printf("%.2X ",tabDonnees[i].donnee[j]);
-						//json.AjouterDonneesJSON(message,tabDonnees[i].identifiant,tabDonnees[i].longueur,tabDonnees[i].donnee[j]);
 						
 					}
 					cout<<" nb : "<<nbTrames[i];
@@ -124,9 +153,9 @@ int main(){
 			
 		}
 	}
-	serveur.FermerCommunication();
-	vscom.DeconnexionVSCOM();
-	vscom.FermerCOM();
+	
+	
+	
     return 0;
 }
 
