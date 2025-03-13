@@ -8,7 +8,7 @@ JSONFile::JSONFile(std::string nomUtilisateur,std::string nomFichier){
 void JSONFile::creerJSON(std::string nomFichier){
     try{
         std::cout << "dd";
-        busCAN.open(nomFichier,std::ios::app);
+        busCAN.open(nomFichier);
         //busCAN<<"test"; busCAN.close();
         
     }catch(std::runtime_error& e){
@@ -18,7 +18,7 @@ void JSONFile::creerJSON(std::string nomFichier){
 }
 
 void JSONFile::DebuterJSON(std::string nomUtilisateur){
-    leJSON = "{ \"nomUtilisateur\" : \"" + nomUtilisateur + "\", \" data \" : [";
+    leJSON = "{\"users\" : \"" + nomUtilisateur + "\", \"data\" : [";
 }
 
 // void JSONFile::AjouterDonneesJSON(std::string message,int idCAN,int lenData,int Data){
@@ -57,21 +57,37 @@ void JSONFile::DebuterJSON(std::string nomUtilisateur){
 //    	leJSON += message;
 // }
 
-void JSONFile::AjouterDonneesJSON(std::string message, int idCAN, int lenData, int Data) {
-    message = "{";
-    std::string lenDataStr = std::to_string(lenData);
-    std::string idCANStr = std::to_string(idCAN);
-    std::string DataStr = std::to_string(Data);
+void JSONFile::AjouterDonneesJSON(std::string idCAN, std::string lenData, std::string Data) {
+    std::string message = "{";
+   
 
-    message += "\"idCAN\":" + idCANStr + ",";
-    message += "\"lenData\":" + lenDataStr + ",";
-    message += "\"Data\":" + DataStr;
+    message += "\"idCAN\":" + idCAN + ",";
+    message += "\"lenData\":" + lenData + ",";
+    message += "\"Data\":" + Data;
     message += "}";
 
     if (leJSON.back() != '[') {
         leJSON += ",";
     }
     leJSON += message;
+}
+
+void JSONFile::AjouterDonneesJSON(unsigned int idCAN, int lenData, unsigned char * Data) {
+
+    std::stringstream ss;
+    ss << "{\"idCAN\": \"0x" << std::hex << idCAN << "\",";
+    ss << "\"lenData\":" << std::dec << lenData << ",";
+    ss << "\"Data\": \"0x";
+    for(int i=0; i<lenData;i++)
+    {
+        ss << std::hex << (unsigned int)Data[i] ;
+    }
+    ss << "\"}";
+    if (leJSON.back() != '[') {
+        leJSON += ",";
+    }
+    leJSON += ss.str();
+
 }
 
 
@@ -111,4 +127,8 @@ void JSONFile::CloreJSON(){
     leJSON += "}]}";
     busCAN<<leJSON;
     busCAN.close();
+}
+
+std::string JSONFile::getJSON(){
+    return leJSON;
 }

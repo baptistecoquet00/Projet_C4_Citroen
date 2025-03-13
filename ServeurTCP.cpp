@@ -124,18 +124,17 @@ int ServeurTCP::Recevoir(char message[], int longueurMaxDuMessage,int timeout_us
 	return nbOctets;
 }
 
-bool ServeurTCP::EstConnecte(){
+bool ServeurTCP::ClientEstConnecte(){
     struct pollfd pfd;
     pfd.fd = m_SocketCommunication;
     pfd.events = POLLIN;
-    int ret = poll(&pfd, 1, 1000); // timeout de 1000 ms (1 seconde)
-
-        if (ret > 0) {
-            if (pfd.revents & POLLHUP) {
-                return false; // La connexion est terminée
-            }
+    int ret = poll(&pfd, 1, 5000); // timeout de 5000 ms (5 seconde)
+    if (ret > 0) {
+        if (pfd.revents & POLLHUP) {
+            return false; // La connexion est terminée
         }
-        return true; // La connexion est persistante
+    }
+    return true; // La connexion est persistante
 }
 
 void ServeurTCP::FermerCommunication(){

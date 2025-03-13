@@ -1,1 +1,1 @@
-{ "nomUtilisateur" : "TestUser", " data " : }]}{ "nomUtilisateur" : "TestUser", " data " : }]}
+{"users" : "TestUser", "data" : [{"idCAN": "0x115","lenData":4,"Data": "0x1000"}]}
