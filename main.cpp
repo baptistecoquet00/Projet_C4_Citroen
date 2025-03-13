@@ -165,7 +165,7 @@ int main(){
 			client.SeDeconnecter();	
 			if(serveur.ClientEstConnecte())
 			{
-				cout << "FERMETURE SOCKET" << endl;
+				cout << "\nFERMETURE SOCKET" << endl;
 				serveur.FermerCommunication();
 				cout<< "DECONNEXION VSCOM"<<endl;
 				vscom.DeconnexionVSCOM();
