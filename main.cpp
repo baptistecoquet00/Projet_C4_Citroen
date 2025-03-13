@@ -116,34 +116,25 @@ int main(){
 			tabDonnees[d.identifiant].requete=d.requete;
 			nbTrames[d.identifiant]++;
 			char trameFormatee[1500]="",donnee[1500]="";
-			//sprintf(donnee,"%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X",d.donnee[0],d.donnee[1],d.donnee[2],d.donnee[3],d.donnee[4],d.donnee[5],d.donnee[6],d.donnee[7]);
-			//sprintf(trameFormatee,"%.3X [ %d octets ] : %s",d.identifiant,d.longueur,donnee);
+			sprintf(donnee,"%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X",d.donnee[0],d.donnee[1],d.donnee[2],d.donnee[3],d.donnee[4],d.donnee[5],d.donnee[6],d.donnee[7]);
+			sprintf(trameFormatee,"%.3X [ %d octets ] : %s",d.identifiant,d.longueur,donnee);
 			tabDonneesFormatee[d.identifiant]=trameFormatee;
-			//clrscr();
 			cout<<endl<<endl<<"=============================================="<<endl;
 			//"0B6 [ 8 octets ] : 5600160041547ED0"
 			JSONFile json("TestUser","CAN.json");
 			for(int i=0;i<2048;i++)
 			{	
-				//json.AjouterDonneesJSON(trameFormatee, 123, 456, 789);
-				
 				if(tabDonnees[i].identifiant)
-				{	//printf("%.3X ",tabDonnees[i].identifiant);
-					//cout<<"\t"<<tabDonnees[i].longueur<<"\t";
+				{	printf("%.3X ",tabDonnees[i].identifiant);
+					cout<<"\t"<<tabDonnees[i].longueur<<"\t";
 					
-					//std::string lenDataStr = std::to_string(tabDonnees[i].longueur);
-    				//std::string idCANStr = std::to_string(tabDonnees[i].identifiant);
-    				
-
-
 					for(int j=0;j<8;j++)
 					{ 
 						std::string DataStr = std::to_string(tabDonnees[i].donnee[j]);
-						//printf("%.2X ",tabDonnees[i].donnee[j]);
+						printf("%.2X ",tabDonnees[i].donnee[j]);
 						
-						//json.AjouterDonneesJSON(idCANStr, lenDataStr,DataStr);
 					}
-					//cout<<" nb : "<<nbTrames[i];
+					cout<<" nb : "<<nbTrames[i];
 					cout<<endl;	
 					json.AjouterDonneesJSON(tabDonnees[i].identifiant, tabDonnees[i].longueur, tabDonnees[i].donnee);		
 				}
