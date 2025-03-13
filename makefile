@@ -25,8 +25,11 @@ MessageCAN.o: MessageCAN.h MessageCAN.cpp
 JSONFile.o: JSONFile.h JSONFile.cpp
 	$(CC) $(CFLAGS) JSONFile.cpp
 
-Serveur: main.o VSCOM.o SNPortSerie.o ServeurTCP.o SNIRconversions.o MessageCAN.o JSONFile.o
-	$(CC) main.o VSCOM.o SNPortSerie.o ServeurTCP.o MessageCAN.o SNIRconversions.o JSONFile.o -lpthread -o Serveur 
+ClientTCP.o: ClientTCP.h ClientTCP.cpp
+	$(CC) $(CFLAGS) ClientTCP.cpp
+
+Serveur: main.o VSCOM.o SNPortSerie.o ServeurTCP.o SNIRconversions.o MessageCAN.o JSONFile.o ClientTCP.o
+	$(CC) main.o VSCOM.o SNPortSerie.o ServeurTCP.o MessageCAN.o SNIRconversions.o JSONFile.o ClientTCP.o -lpthread -o Serveur 
 
 clean :
 	rm -f *.o Serveur

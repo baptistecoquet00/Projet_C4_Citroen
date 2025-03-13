@@ -16,9 +16,7 @@ public:
     JSONFile(std::string nomUtilisateur,std::string nomFichier);
     void creerJSON(std::string nomFichier);
     void DebuterJSON(std::string nomUtilisateur);
-    void AjouterDonneesJSON(std::string idCAN, std::string lenData, std::string Data);
-    void AjouterDonneesJSON(unsigned int idCAN, int lenData, unsigned char * Data);
+    void AjouterDonneesJSON(std::string message,int idCAN,int lenData,int Data);
     void CloreJSON();
-    std::string getJSON();
 };
 #endif

@@ -13,6 +13,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <poll.h>
 
 
 using namespace std;
@@ -121,6 +122,19 @@ int ServeurTCP::Recevoir(char message[], int longueurMaxDuMessage,int timeout_us
 	//string str(message, nbOctets);
 	//cout << "Message du client (" << nbOctets << " octets) : " << str << endl;
 	return nbOctets;
+}
+
+bool ServeurTCP::ClientEstConnecte(){
+    struct pollfd pfd;
+    pfd.fd = m_SocketCommunication;
+    pfd.events = POLLIN;
+    int ret = poll(&pfd, 1, 5000); // timeout de 5000 ms (5 seconde)
+    if (ret > 0) {
+        if (pfd.revents & POLLHUP) {
+            return false; // La connexion est terminée
+        }
+    }
+    return true; // La connexion est persistante
 }
 
 void ServeurTCP::FermerCommunication(){
