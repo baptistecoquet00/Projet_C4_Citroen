@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 626
+ETag: W/"272-PmUzdqrGTy+yEdtTyhZrAsYbiVE"
+Date: Fri, 07 Mar 2025 10:23:53 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+[{"id":25,"can_id":"128","octet":0,"signification":"Voyant ceinture securite et frein a main"},{"id":26,"can_id":"128","octet":1,"signification":"Voyant porte ouverte"},{"id":27,"can_id":"128","octet":2,"signification":"Aucune donnee "},{"id":28,"can_id":"128","octet":3,"signification":"Aucune donnee"},{"id":29,"can_id":"128","octet":4,"signification":"Etat des feux et carburant"},{"id":30,"can_id":"128","octet":5,"signification":"Niveau de carburant bas"},{"id":31,"can_id":"128","octet":6,"signification":"Voyant ceinture clignote"},{"id":32,"can_id":"128","octet":7,"signification":"Retroeclairage du tableau de bord"}]

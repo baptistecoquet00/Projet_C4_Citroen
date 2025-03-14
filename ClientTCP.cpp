@@ -12,9 +12,7 @@
 #endif
 #include <stdio.h>
 #include <string.h>
-#include <fstream>
-#include <iostream>
-#include <sstream>
+
 using namespace std;
 
 

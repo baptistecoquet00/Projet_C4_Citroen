@@ -1,6 +1,8 @@
+
+#pragma once
 #ifndef CLIENTTCP_H
 #define CLIENTTCP_H
-#include <string>
+#include <iostream>
 
 
 class ClientTCP

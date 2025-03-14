@@ -113,6 +113,10 @@
         <CppCompile Include="File1.cpp">
             <BuildOrder>1</BuildOrder>
         </CppCompile>
+        <CppCompile Include="GestionnaireSignification.cpp">
+            <DependentOn>GestionnaireSignification.h</DependentOn>
+            <BuildOrder>4</BuildOrder>
+        </CppCompile>
         <PCHCompile Include="Project1PCH1.h">
             <BuildOrder>0</BuildOrder>
         </PCHCompile>

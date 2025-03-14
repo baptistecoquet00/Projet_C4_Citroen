@@ -1,0 +1,204 @@
+	   #pragma once
+#include "GestionnaireSignification.h"
+#include "ClientTCP.h"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
+#include <windows.h>
+
+using namespace std;
+int main(){
+
+	int choix=3;
+	cout<<"Pour choisir un id tapez 1 , pour envoyer une trame tapez 2 et pour avoir la signification tapez 3"<<endl;
+	cin>>choix;
+
+	GestionnaireSignification gestionnaire;
+	ClientTCP client;
+	char identifiant[10];
+	char reponse[50];
+	cin.get();
+
+
+	switch (choix) {
+		case 1:
+			client.SeConnecterAUnServeur("172.20.21.9",2085);
+			cout<<"Ecrire l'identifiant souhaite ( 0 pour tout recevoir) :"<<endl;
+			cin>>identifiant;
+
+			//Envoie fde l'identifiant
+			client.Envoyer(identifiant,strlen(identifiant));
+
+			//Réception de la réponse
+			client.Recevoir(reponse,50);
+			cout<<reponse<<endl;
+			cin.get();
+			client.SeDeconnecter();
+			break;
+
+		case 2:
+			client.SeConnecterAUnServeur("172.20.21.9",2085);
+			//Envoyer message serveur direct
+			while (true)
+			{
+				char donnees[30];
+				cout<<"Ecire la trame a envoyer : (ex 115 [ 4 octets ] : 0800000000000000)"<<endl;
+				cin.getline(donnees,1000);
+				client.Envoyer(donnees);
+				cin.get();
+			}
+			break;
+
+	  	case 3:
+			cout<<"Choisir votre can id"<<endl;
+			cin>>identifiant;
+			gestionnaire.recupererDonnees(identifiant);
+			gestionnaire.chargerJson("data.json");
+			gestionnaire.recupererSignification(identifiant);
+
+			break;
+	  }
+	return 0;
+}
+
+
+
+
+
+
+	///////////////////////////////////////////Choisir un identifiant  et communiquer avec le serv/////////////////////////////////
+//  client.SeConnecterAUnServeur("172.20.21.9",2025);
+//	cout<<"Ecrire l'identifiant souhaite :"<<endl;
+//	cin>>identifiant;
+//
+//	//Envoie fde l'identifiant
+//	client.Envoyer(identifiant,strlen(identifiant));
+//
+//	//Réception de la réponse
+//	client.Recevoir(reponse,50);
+//	cout<<reponse<<endl;
+//
+//	//Envoyer message serveur direct
+//	while (true)
+//	{
+//		char donnees[30];
+//		cout<<"Ecire la trame a envoyer : (ex 115 [ 4 octets ] : 0800000000000000)"<<endl;
+//		cin.getline(donnees,1000);
+//		client.Envoyer(donnees);
+//		cin.get();
+//	}
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////Ouverture JSON////////////////////////////////////////////////////////////////
+//	ifstream fichier;
+//	fichier.open("data.txt");
+//	if (!fichier) {
+//		cout << "Erreur: impossible d'ouvrir le fichier" << endl;
+//		system("pause");
+//		return 1;
+//	}
+//
+//	// Lit et affiche le contenu du fichier
+//	string ligne;
+//	cout << "Contenu du fichier JSON:" << endl;
+//	while (getline(fichier, ligne)) {
+//		cout << ligne << endl;
+//	}
+//	fichier.close();
+//	system("pause");
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////Requet GET + insertion json//////////////////////////////////////////////////////////////////////	cout<<"choisi un identifiant";
+//	cin>>identifiant;
+//	client.SeConnecterAUnServeur("172.18.110.111",3000);
+//	Sleep(2000);
+//	string requete="GET /api/significations/"+std::string(identifiant)+" HTTP/1.1\r\nHost: 172.18.110.111:3000\r\nConnection: keep-alive\r\n\r\n";
+//	cout<<requete<<endl;
+//	client.Envoyer(requete);
+//	client.Recevoir(json,5000);
+//	cout<<json;
+//	cin.get();
+//	client.SeDeconnecter();
+//	ofstream fichier("data.json");
+//	if (!fichier) {
+//		cout << "Erreur: impossible d'ouvrir le fichier" << endl;
+//		system("pause");
+//		return 1;
+//	}
+//	fichier<<json;
+//	fichier.close();
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+	/////////////////////////////////////////////////////Case 3 ////////////////////////////////////////////////////////////////
+//			cout<<"choisi un identifiant";
+//			cin>>identifiant;
+//			client.SeConnecterAUnServeur("172.18.110.111",3000);
+//			Sleep(2000);
+//			string requete="GET /api/significations/"+std::string(identifiant)+" HTTP/1.1\r\nHost: 172.18.110.111:3000\r\nConnection: keep-alive\r\n\r\n";
+//			cout<<requete<<endl;
+//			client.Envoyer(requete);
+//			client.Recevoir(json,5000);
+//			cout<<json;
+//			cin.get();
+//			client.SeDeconnecter();
+//			ofstream fichier("data.json");
+//			if (!fichier) {
+//				cout << "Erreur: impossible d'ouvrir le fichier" << endl;
+//				system("pause");
+//				return 1;
+//			}
+//
+//			fichier<<json;
+//			fichier.close();
+//
+//			string jsonn="";
+//			ifstream f;
+//			f.open("data.json");
+//			string id,description;
+//			int numOctet;
+//			int positionID,positionOctet,positionSignification,debutDescription,finDescription;
+//			char ligne[1000];
+//			if(f.is_open())
+//			{   do
+//				{	f.getline(ligne,1000);
+//					cout<<ligne<<endl;
+//					jsonn+=ligne;
+//				}while(!f.eof());
+//				f.close();
+//			}
+//			cout<<jsonn<<endl;
+//			while(1)
+//			{   cin>>id;
+//				cin>>numOctet;
+//				positionID=0;positionOctet=0;positionSignification=0;debutDescription=0;finDescription=0;
+//				positionID=jsonn.find(id,0);
+//				if(positionID!=-1)
+//				{   stringstream octetEtnum;
+//					octetEtnum<<"\"octet\":";
+//					octetEtnum<<numOctet;
+//					positionOctet=jsonn.find(octetEtnum.str(),positionID);
+//					if(positionOctet!=-1)
+//					{   positionSignification=jsonn.find("signification",positionOctet);
+//						if(positionSignification!=-1)
+//						{   debutDescription=jsonn.find("\"",positionSignification+15);
+//							if(debutDescription!=1)
+//							{	finDescription=jsonn.find("\"",debutDescription+1);
+//								if(finDescription!=1)
+//								{   description=jsonn.substr(debutDescription+1,finDescription-debutDescription-1);
+//									cout<<description<<endl;
+//								} else cout<<"no fin"<<endl;
+//							} else cout<<"no debut"<<endl;
+//						} else cout<<"no signification"<<endl;
+//					} else cout<<"no octet"<<endl;
+//				}
+//				else cout<<"ID absent"<<endl;
+//			}
+//			cin.get();
+//			break;
+//	}
+//	cin.get();
+
+
+

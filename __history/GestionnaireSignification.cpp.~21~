@@ -1,0 +1,65 @@
+#include "GestionnaireSignification.h"
+GestionnaireSignification::GestionnaireSignification(){
+
+
+
+};
+
+std::string GestionnaireSignification::recupererDonnees(std::string identifiant){
+	client.SeConnecterAUnServeur("172.18.110.111",3000);
+	Sleep(500);
+	std::string requete="GET /api/significations/"+std::string(identifiant)+" HTTP/1.1\r\nHost: 172.18.110.111:3000\r\nConnection: keep-alive\r\n\r\n";
+	std::cout<<requete<<std::endl;
+	client.Envoyer(requete);
+	Sleep(500);
+	char message[10000];
+	int n=client.Recevoir(message,10000);
+	std::cout<<"n="<<n<<std::endl;
+	message[n]=0;
+	json=message;
+	Sleep(2000);
+	//client.SeDeconnecter();
+	return json;
+};
+
+std::string GestionnaireSignification::recupererSignification(std::string identifiant,int numOctet){
+	int positionID=0;int positionOctet=0;int positionSignification=0;int debutDescription=0;int finDescription=0;
+	positionID=json.find(identifiant,0);
+	if(positionID!=-1)
+	{   std::stringstream octetEtnum;
+		octetEtnum<<"\"octet\":";
+		octetEtnum<<numOctet;
+		positionOctet=json.find(octetEtnum.str(),positionID);
+		if(positionOctet!=-1)
+		{   positionSignification=json.find("signification",positionOctet);
+			if(positionSignification!=-1)
+				{   debutDescription=json.find("\"",positionSignification+15);
+					if(debutDescription!=1)
+					{	finDescription=json.find("\"",debutDescription+1);
+						if(finDescription!=1)
+						{   std::string description=json.substr(debutDescription+1,finDescription-debutDescription-1);
+							return description;
+						} else return "erreur";
+					} else return "erreur";
+				} else return "erreur";
+		} else return "...";
+	}else return "ID absent";
+}
+
+
+bool GestionnaireSignification::chargerJson(std::string nomFichier){
+	char ligne[1000];
+	ifstream f;
+	f.open(nomFichier.c_str());
+			if(f.is_open())
+			{   do
+				{	f.getline(ligne,1000);
+					std::cout<<ligne<<std::endl;
+					json+=ligne;
+				}while(!f.eof());
+				f.close();
+			}
+};
+
+//---------------------------------------------------------------------------
+#pragma package(smart_init)

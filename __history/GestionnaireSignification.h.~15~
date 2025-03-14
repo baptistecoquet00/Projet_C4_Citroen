@@ -1,0 +1,26 @@
+//---------------------------------------------------------------------------
+#pragma once
+#ifndef GestionnaireSignificationH
+#define GestionnaireSignificationH
+#include "ClientTCP.h"
+#include <fstream>
+#include <sstream>
+#include <windows.h> // Pour Sleep()
+#include <string>
+//---------------------------------------------------------------------------
+class GestionnaireSignification{
+private:
+	ClientTCP client;
+	std::string json;
+
+	std::string serveurIP;
+	int portServeur;
+
+public:
+	GestionnaireSignification();
+	void recupererDonnees(std::string identifiant);
+	void recupererSignification(std::string identifiant);
+	bool chargerJson(std::string nomFichier);
+};
+
+#endif

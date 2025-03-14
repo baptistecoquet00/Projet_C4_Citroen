@@ -1,0 +1,73 @@
+//---------------------------------------------------------------------------
+#include "ClientTCP.h"
+#include "GestionnaireSignification.h"
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <windows.h> // Pour Sleep()
+
+
+
+GestionnaireSignification::GestionnaireSignification(std::string nomFichier){
+
+	jsonn.open(nomFichier);
+
+};
+
+void GestionnaireSignification::recupererDonnees(std::string identifiant){
+	client.SeConnecterAUnServeur("172.18.110.111",3000);
+	Sleep(2000);
+	string requete="GET /api/significations/"+std::string(identifiant)+" HTTP/1.1\r\nHost: 172.18.110.111:3000\r\nConnection: keep-alive\r\n\r\n";
+	std::cout<<requete<<endl;
+	client.Envoyer(requete);
+	client.Recevoir(json,5000);
+	std::cout<<json;
+	std::cin.get();
+	client.SeDeconnecter();
+};
+
+void GestionnaireSignification::recupererSignification(std::string identifiant){
+	while(1){
+	std::cin>>identifiant;
+	std::cin>>numOctet;
+	positionID=0;positionOctet=0;positionSignification=0;debutDescription=0;finDescription=0;
+	positionID=jsonn.find(id,0);
+	if(positionID!=-1)
+	{   stringstream octetEtnum;
+		octetEtnum<<"\"octet\":";
+		octetEtnum<<numOctet;
+		positionOctet=jsonn.find(octetEtnum.str(),positionID);
+		if(positionOctet!=-1)
+		{   positionSignification=jsonn.find("signification",positionOctet);
+			if(positionSignification!=-1)
+				{   debutDescription=jsonn.find("\"",positionSignification+15);
+					if(debutDescription!=1)
+					{	finDescription=jsonn.find("\"",debutDescription+1);
+						if(finDescription!=1)
+						{   description=jsonn.substr(debutDescription+1,finDescription-debutDescription-1);
+							std::cout<<description<<endl;
+						} else std::cout<<"no fin"<<endl;
+					} else std::cout<<"no debut"<<endl;
+				} else std::cout<<"no signification"<<endl;
+		} else std::cout<<"no octet"<<endl;
+	}else std::cout<<"ID absent"<<endl;
+	}std::cin.get();
+};
+
+bool GestionnaireSignification::chargerJson(std::string nomFichier){
+	char ligne[1000];
+	ifstream f;
+	f.open(nomFichier);
+			if(f.is_open())
+			{   do
+				{	f.getline(ligne,1000);
+					std::cout<<ligne<<endl;
+					jsonn+=ligne;
+				}while(!f.eof());
+				f.close();
+			}
+	std::cout<<jsonn<<endl;
+};
+
+//---------------------------------------------------------------------------
+#pragma package(smart_init)

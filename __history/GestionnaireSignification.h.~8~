@@ -1,0 +1,23 @@
+//---------------------------------------------------------------------------
+                                     #pragma once
+#ifndef GestionnaireSignificationH
+#define GestionnaireSignificationH
+
+#include <string>
+//---------------------------------------------------------------------------
+class GestionnaireSignification{
+private:
+	std::string json;
+	std::string nomFichier;
+	std::string serveurIP;
+	ifstream jsonn;
+	int portServeur;
+
+public:
+	GestionnaireSignification();
+	void recupererDonnees(std::string identifiant);
+	void recupererSignification(std::string identifiant);
+	bool chargerJson(std::string nomFichier);
+};
+
+#endif
