@@ -52,7 +52,7 @@ exports.getSignificationsUnOctet = async (req, res) => {
 
 exports.PostTrame = async (req, res) => {
   try {
-    console.log("📩 Requête reçue :", req.body);
+    console.log("Requête reçue :", req.body);
 
     const { users, data } = req.body; // Extraction des données du JSON
 
@@ -67,7 +67,21 @@ exports.PostTrame = async (req, res) => {
     res.json({ message: "Trames CAN traitées avec succès !", details: response });
 
   } catch (error) {
-    console.error("❌ Erreur dans apiController :", error);
+    console.error("Erreur dans apiController :", error);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+exports.getTramesParId = async (req, res) => {
+  const id = req.params.id;
+  // Vérifier que l'ID contient uniquement lettres et chiffres
+  if (!/^[a-zA-Z0-9]+$/.test(id)) {
+    return res.status(400).json({ error: "ID invalide." });
+  }
+  try {
+    const TramesParId = await rest.getTramesParId(id);
+    res.json(TramesParId);
+  } catch (error) {
     res.status(500).json({ error: "Erreur serveur" });
   }
 };

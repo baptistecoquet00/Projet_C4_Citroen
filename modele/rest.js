@@ -24,7 +24,17 @@ exports.getSignifications = async (id) => {
     throw error;
   }
 };
-
+exports.getTramesParId = async (id) => {
+  try {
+    const query = "SELECT * FROM trames_can WHERE can_id = $1 ORDER BY horodatage ASC";
+    const result = await db.query(query, [id]); // Deux paramètres dans la requête
+    console.log(result.rows);
+    return result.rows;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des trames par id  :", error);
+    throw error;
+  }
+};
 exports.getSignificationsUnOctet = async (id, octet) => {
   try {
     const query = "SELECT can_id,octet,signification FROM significations_can WHERE can_id = $1 AND octet = $2";
@@ -37,51 +47,111 @@ exports.getSignificationsUnOctet = async (id, octet) => {
   }
 };
 
-exports.PostTrame = async (body) => { // On récupère directement `body`
+///////////////////////////////////////////////////////////////     POST     /////////////////////////////////////////////////////////////////////////////////////////
+
+exports.PostTrame = async (body) => {
   try {
-    const { users, data } = body; // Extraction des données
+    const { users, data } = body;
 
     // Vérification du format JSON
     if (!users || !Array.isArray(data)) {
       return { error: "Format JSON invalide" };
     }
 
+    const errors = []; // Pour collecter les trames ignorées
+
     for (const trame of data) {
       let { idCAN, lenData, Data } = trame;
 
-      if (!idCAN || !lenData || !Data || Data.toString().length !== 16) {
-        return { error: "Données CAN invalides" };
+      // Nettoyage du "0x" et mise en majuscule
+      idCAN = idCAN.replace(/^0x/i, '').toUpperCase();
+      Data = Data.replace(/^0x/i, '').toUpperCase();
+
+      // ✅ Seules les Data de 16 caractères (8 octets) sont acceptées
+      if (Data.length !== 16) {
+        errors.push(`Trame ignorée : Data doit contenir exactement 8 octets (16 caractères) pour idCAN ${idCAN}, reçu : ${Data.length} caractères.`);
+        continue; // Passe à la suivante
       }
 
-      idCAN = idCAN.toUpperCase();
-      const octets = Data.toString().match(/.{2}/g);
+      // ✅ Découper en octets (paires de 2 caractères)
+      const octets = Data.match(/.{2}/g); // Va donner un tableau de 8 éléments
 
-      // Vérifier si l'identifiant existe déjà dans `identifiants_can`
+      // ✅ Vérifier si le can_id existe déjà dans identifiants_can
       const checkQuery = `SELECT COUNT(*) FROM identifiants_can WHERE can_id = $1`;
       const checkResult = await db.query(checkQuery, [idCAN]);
 
-      if (checkResult.rows[0].count == 0) {
-        // Ajouter l'identifiant s'il n'existe pas
+      if (parseInt(checkResult.rows[0].count) === 0) {
+        // ✅ Ajouter can_id s'il n'existe pas
         const insertIdentifiantQuery = `INSERT INTO identifiants_can (can_id) VALUES ($1)`;
         await db.query(insertIdentifiantQuery, [idCAN]);
       }
 
-      // Insérer la trame dans `trames_can`
+      // ✅ Insérer la trame complète
       const insertTrameQuery = `
         INSERT INTO trames_can (can_id, horodatage, octet_0, octet_1, octet_2, octet_3, octet_4, octet_5, octet_6, octet_7)
         VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)
       `;
-
       await db.query(insertTrameQuery, [idCAN, ...octets]);
     }
 
-    return { message: "Trames CAN insérées avec succès !" };
+    // ✅ Réponse
+    if (errors.length > 0) {
+      return { message: "Certaines trames ont été ignorées.", details: errors };
+    } else {
+      return { message: "Toutes les trames CAN ont été traitées et insérées avec succès !" };
+    }
 
   } catch (error) {
     console.error("Erreur lors de l'insertion des trames CAN :", error);
     return { error: "Erreur serveur" };
   }
 };
+// exports.PostTrame = async (body) => { // On récupère directement `body`
+//   try {
+//     const { users, data } = body; // Extraction des données
+
+//     // Vérification du format JSON
+//     if (!users || !Array.isArray(data)) {
+//       return { error: "Format JSON invalide" };
+//     }
+
+//     for (const trame of data) {
+//       let { idCAN, lenData, Data } = trame;
+
+//       if (!idCAN || !lenData || !Data || Data.toString().length !== 16) {
+//         return { error: "Données CAN invalides" };
+//       }
+
+//        //////////////Il faut retirer les 0x avant chaque caractère HEXA//////////////////
+
+//       idCAN = idCAN.toUpperCase();
+//       const octets = Data.toString().match(/.{2}/g);
+
+//       // Vérifier si l'identifiant existe déjà dans `identifiants_can`
+//       const checkQuery = `SELECT COUNT(*) FROM identifiants_can WHERE can_id = $1`;
+//       const checkResult = await db.query(checkQuery, [idCAN]);
+
+//       if (checkResult.rows[0].count == 0) {
+//         // Ajouter l'identifiant s'il n'existe pas
+//         const insertIdentifiantQuery = `INSERT INTO identifiants_can (can_id) VALUES ($1)`;
+//         await db.query(insertIdentifiantQuery, [idCAN]);
+//       }
+
+//       // Insérer la trame dans `trames_can`
+//       const insertTrameQuery = `
+//         INSERT INTO trames_can (can_id, horodatage, octet_0, octet_1, octet_2, octet_3, octet_4, octet_5, octet_6, octet_7)
+//         VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)`;
+
+//       await db.query(insertTrameQuery, [idCAN, ...octets]);
+//     }
+
+//     return { message: "Trames CAN insérées avec succès !" };
+
+//   } catch (error) {
+//     console.error("Erreur lors de l'insertion des trames CAN :", error);
+//     return { error: "Erreur serveur" };
+//   }
+// };
 // exports.PostTrame = async (req, res) => {
 //   try {
 //     //console.log("Requête reçue :", req.body); // Ajoute ce log
