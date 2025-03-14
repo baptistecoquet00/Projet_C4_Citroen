@@ -35,9 +35,9 @@ void * ThreadServeur(void * pDataBis)
 		
 		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
 		{	message[nbOctets]=0;
-			//cout<<message<<endl;
-			//clrscr();
 			
+			//cout<<"Message du client recue : "<<message<<endl;
+
 			int id,r_long;unsigned char r_donnee[8]={3,4,5,6,7,8,9,10};
 			char r_donnees[30];
 			sscanf(message,"%X",&id);
@@ -57,25 +57,42 @@ void * ThreadServeur(void * pDataBis)
 			}
 			else
 			{   if(id)
+				{
 					serveur.Envoyer((char*)tabDonneesFormatee[id].c_str(),tabDonneesFormatee[id].length());
+				}
+				// else if(id==0){
+				// 	for(int i=0;i<2048;i++)
+				// 	{	
+				// 		if(tabDonnees[i].identifiant)
+				// 		{	serveur.Envoyer((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
+							
+				// 		}
+				// 	}
+				// }
 				else
+				{
 					for(int i=0;i<2048;i++)
 					{	
 						if(tabDonnees[i].identifiant)
 						{	serveur.Envoyer((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
-							/*for(int j=0;j<8;j++)*/  //json.AjouterDonneesJSON(msg,tabDonnees[i].identifiant,tabDonnees[i].longueur,tabDonnees[i].donnee[j]);
 						}
 					}
+				}
 				//cout<<"Message du client : "<<tabDonneesFormatee<<endl;
-			}
-
-			
+			}	
 			//Sleep(2000);
 		}
-
-		
+		else // Si nbOctets vaut 0, envoyer toutes les trames
+        {
+            for (int i = 0; i < 2048; i++)
+            {
+                if (tabDonnees[i].identifiant)
+                {
+                    serveur.Envoyer((char*)(tabDonneesFormatee[i] + "\n").c_str(), tabDonneesFormatee[i].length() + 1);
+                }
+            }
+        }
 	}
-	
 }
 
 int main(){
@@ -130,7 +147,6 @@ int main(){
 					
 					for(int j=0;j<8;j++)
 					{ 
-						std::string DataStr = std::to_string(tabDonnees[i].donnee[j]);
 						printf("%.2X ",tabDonnees[i].donnee[j]);
 						
 					}
@@ -146,17 +162,20 @@ int main(){
 			string jsonstr = json.getJSON();
 			int LengthJSON;
 			for(int i = 0;i<jsonstr.length();i++) LengthJSON =i;
-			string LengthJSONstr = std::to_string(LengthJSON);
-			string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: 172.18.110.111:3000\r\nContent-Length: "+LengthJSONstr+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"";
+			string LengthJSONstr = std::to_string(LengthJSON+1);
+			string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: 172.18.110.111:3000\r\nContent-Length: "+(LengthJSONstr)+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"";
 			cout<<"Requete HTTP : "<<requete<<endl;
 			client.Envoyer(requete);
 			// serveur.FermerCommunication();
 			// vscom.DeconnexionVSCOM();
 			// vscom.FermerCOM();
-			client.SeDeconnecter();	
-			if(serveur.ClientEstConnecte())
+			//client.SeDeconnecter();	
+			
+			
+			if(!serveur.ClientEstConnecte())
 			{
-				cout << "\nFERMETURE SOCKET" << endl;
+				cout<<"Le client n'est plus connecté."<<endl;
+				cout << "FERMETURE SOCKET" << endl;
 				serveur.FermerCommunication();
 				cout<< "DECONNEXION VSCOM"<<endl;
 				vscom.DeconnexionVSCOM();

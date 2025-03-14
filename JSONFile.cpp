@@ -7,7 +7,6 @@ JSONFile::JSONFile(std::string nomUtilisateur,std::string nomFichier){
 
 void JSONFile::creerJSON(std::string nomFichier){
     try{
-        std::cout << "dd";
         busCAN.open(nomFichier);
         //busCAN<<"test"; busCAN.close();
         
