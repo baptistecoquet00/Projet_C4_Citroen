@@ -124,17 +124,34 @@ int ServeurTCP::Recevoir(char message[], int longueurMaxDuMessage,int timeout_us
 	return nbOctets;
 }
 
-bool ServeurTCP::ClientEstConnecte(){
-    struct pollfd pfd;
-    pfd.fd = m_SocketCommunication;
-    pfd.events = POLLIN;
-    int ret = poll(&pfd, 1, 5000); // timeout de 5000 ms (5 seconde)
-    if (ret > 0) {
-        if (pfd.revents & POLLHUP) {
-            return false; // La connexion est terminée
-        }
-    }
-    return true; // La connexion est persistante
+// bool ServeurTCP::ClientEstConnecte() {
+//     struct pollfd pfd;
+//     pfd.fd = m_SocketCommunication;
+//     pfd.events = POLLIN;
+//     int ret = poll(&pfd, 1, TIME_UTC); // timeout de 5000 ms (5 secondes)
+//     if (ret > 0) {
+//         if (pfd.revents & POLLHUP) {
+//             return false; // La connexion est terminée
+//         }
+//     } else if (ret == 0) {
+//         // Timeout, pas d'activité
+//         std::cout << "Client déconnecté après 5 secondes d'inactivité" << std::endl;
+//         return false;
+//     }
+//     return true; // La connexion est persistante
+// }
+
+bool ServeurTCP::ClientEstConnecte(){ 
+    struct pollfd pfd; 
+    pfd.fd = m_SocketCommunication; 
+    pfd.events = POLLIN; 
+    int ret = poll(&pfd, 1, 5000); // timeout de 5000 ms (5 seconde) 
+    if (ret > 0) { 
+        if (pfd.revents & POLLHUP) { 
+            return false; // La connexion est terminée 
+            } 
+        } 
+        return true; // La connexion est persistante }
 }
 
 void ServeurTCP::FermerCommunication(){
