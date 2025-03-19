@@ -14,13 +14,14 @@
 #include "ClientTCP.h"
 typedef char _TCHAR;
 #define _tmain main
-string testUnitaire="SERVEURTCP";
+string testUnitaire="CLIENTREST";
 //"CAN", "SERVEURTCP", "CLIENTREST", "COMPLET"
 
 using namespace std;
 
 VSCOM vscom;
 ServeurTCP serveur("0.0.0.0",2085);
+JSONFile json("TestUser","CAN.json");
 ClientTCP client;
 int nbTrames[2048];
 string tabDonneesFormatee[2048];
@@ -141,6 +142,38 @@ void * ThreadServeur(void * pDataBis)
 	}
 }
 
+void affichageDonneeCAN()
+{
+	cout<<endl<<endl<<"=============================================="<<endl;
+		//"0B6 [ 8 octets ] : 5600160041547ED0"
+		
+		for(int i=0;i<2048;i++)
+		{	if(tabDonnees[i].identifiant)
+			{	printf("%.3X ",tabDonnees[i].identifiant);
+				cout<<"\t"<<tabDonnees[i].longueur<<"\t";
+				for(int j=0;j<8;j++)
+				{	printf("%.2X ",tabDonnees[i].donnee[j]);
+				}
+				cout<<" nb : "<<nbTrames[i];
+				cout<<endl;	
+				json.AjouterDonneesJSON(tabDonnees[i].identifiant, tabDonnees[i].longueur, tabDonnees[i].donnee);		
+			}
+		}
+		json.CloreJSON();
+	cout<<"=============================================="<<endl<<endl<<endl;
+}
+
+void EnvoyerDonneesAuServeurREST()
+{
+	string jsonstr = json.getJSON();
+	int LengthJSON;
+	for(int i = 0;i<jsonstr.length();i++) LengthJSON =i;
+	string LengthJSONstr = std::to_string(LengthJSON+1);
+	string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: 172.18.110.111:3000\r\nContent-Length: "+(LengthJSONstr)+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"";
+	cout<<"Requete HTTP : "<<requete<<endl;
+	client.Envoyer(requete);
+}
+
 int main(){
 	bool OK=true;
 	if(testUnitaire=="CAN" || testUnitaire=="COMPLET")
@@ -177,28 +210,30 @@ int main(){
 	}
 	while(OK)
 	{   	
-			cout<<endl<<endl<<"=============================================="<<endl;
-			//"0B6 [ 8 octets ] : 5600160041547ED0"
-//JSONFile json("TestUser","CAN.json");
-			for(int i=0;i<2048;i++)
-			{	if(tabDonnees[i].identifiant)
-				{	printf("%.3X ",tabDonnees[i].identifiant);
-					cout<<"\t"<<tabDonnees[i].longueur<<"\t";
-					for(int j=0;j<8;j++)
-					{	printf("%.2X ",tabDonnees[i].donnee[j]);
-					}
-					cout<<" nb : "<<nbTrames[i];
-					cout<<endl;	
-//json.AjouterDonneesJSON(tabDonnees[i].identifiant, tabDonnees[i].longueur, tabDonnees[i].donnee);		
-				}
-			}
-//json.CloreJSON();
-			cout<<"=============================================="<<endl<<endl<<endl;
+// 			cout<<endl<<endl<<"=============================================="<<endl;
+// 			//"0B6 [ 8 octets ] : 5600160041547ED0"
+// //JSONFile json("TestUser","CAN.json");
+// 			for(int i=0;i<2048;i++)
+// 			{	if(tabDonnees[i].identifiant)
+// 				{	printf("%.3X ",tabDonnees[i].identifiant);
+// 					cout<<"\t"<<tabDonnees[i].longueur<<"\t";
+// 					for(int j=0;j<8;j++)
+// 					{	printf("%.2X ",tabDonnees[i].donnee[j]);
+// 					}
+// 					cout<<" nb : "<<nbTrames[i];
+// 					cout<<endl;	
+// //json.AjouterDonneesJSON(tabDonnees[i].identifiant, tabDonnees[i].longueur, tabDonnees[i].donnee);		
+// 				}
+// 			}
+// //json.CloreJSON();
+// 			cout<<"=============================================="<<endl<<endl<<endl;
+
+			affichageDonneeCAN();
 			if(testUnitaire=="CAN" || testUnitaire=="COMPLET")
 			{	SauvegarderDonneesCAN();
 			}
 			usleep(2000000);
-			
+			EnvoyerDonneesAuServeurREST();
 //string jsonstr = json.getJSON();
 //int LengthJSON;
 //for(int i = 0;i<jsonstr.length();i++) LengthJSON =i;

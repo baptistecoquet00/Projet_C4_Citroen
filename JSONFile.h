@@ -12,7 +12,6 @@ private:
     std::string leJSON;
     std::ofstream busCAN;
 public:
-    
     JSONFile(std::string nomUtilisateur,std::string nomFichier);
     void creerJSON(std::string nomFichier);
     void DebuterJSON(std::string nomUtilisateur);
