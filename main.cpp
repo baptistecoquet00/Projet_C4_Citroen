@@ -20,16 +20,18 @@ using namespace std;
 
 string testUnitaire;
 //"CAN", "SERVEURTCP", "CLIENTREST", "COMPLET"
-int PortServeurTCP,PortServeurRest;
-string AddrServeurRest;
-string AddrEtPortServeurRest
+
 VSCOM vscom;
 ServeurTCP serveur("0.0.0.0",2085);
 bool EnvoiTrameCAN=false;
 ClientTCP client;
 int nbTrames[2048];
 string tabDonneesFormatee[2048];
-DonneeCAN tabDonnees[2048];     //11 bits
+DonneeCAN tabDonnees[2048];
+int PortServeurTCP,PortServeurRest;
+string AddrServeurRest;
+string AddrEtPortServeurRest;     //11 bits
+
 const std::string currentDateTime() {
     time_t now = time(0);
     struct tm tstruct;
@@ -38,6 +40,7 @@ const std::string currentDateTime() {
     strftime(buf, sizeof(buf), "%Y-%m-%d.%X", & tstruct);
     return buf;
 }
+
 void SauvegarderDonneesCAN()
 {	ofstream fichierDonneeCAN;
 	fichierDonneeCAN.open("DonneeCAN.log");
@@ -96,7 +99,7 @@ void * ThreadServeur(void * pDataBis)
 	bool connecte = true;
 	while(connecte)
 	{	//message du client
-		int nbOctets=serveur.Recevoir(message,1500);
+		int nbOctets=serveur.Recevoir(message,1501);
 		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
 		{	message[nbOctets]=0;
 			//cout<<"Message du client recue : "<<message<<endl;
@@ -131,7 +134,7 @@ void * ThreadServeur(void * pDataBis)
 						}
 					}
 				}
-				//cout<<"Message du client : "<<tabDonneesFormatee<<endl;
+			cout<<"Message du client : "<<message<<endl;
 			}	
 		}
 	}
@@ -162,9 +165,33 @@ void EnvoyerDonneesAuServeurREST(string addrEtPortServeur, string jsonstr)
 	for(int i = 0;i<jsonstr.length();i++) LengthJSON =i;
 	string LengthJSONstr = std::to_string(LengthJSON+1);
 	string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: "+addrEtPortServeur+"\r\nContent-Length: "+(LengthJSONstr)+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"";
-	cout<<"Requete HTTP : "<<requete<<endl;
+	//cout<<"Requete HTTP : "<<requete<<endl;
 	client.Envoyer(requete);
 }
+
+void Parametrage_Serveur(){
+	cout<<"Veuillez choisir le test Unitaire entre \"CAN\", \"SERVEURTCP\", \"CLIENTREST\", \"COMPLET\" : ";
+	//cin>>testUnitaire;
+	testUnitaire ="COMPLET";
+	cout<<"Le test Unitaire choisi est : "<<testUnitaire<<"\n";
+	cout<<"Veuillez choisir le port du Seveur TCP : ";
+	//cin>>PortServeurTCP;
+	PortServeurTCP =2085;
+	cout<<"Le port du serveur TCP choisi est : "<<PortServeurTCP<<"\n";
+	cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : ";
+	//cin>>AddrServeurRest;
+	AddrServeurRest="172.20.21.73";
+	cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
+	cout<<"Veuillez indiqué le port du Serveur Rest : ";
+	//cin>>PortServeurRest;
+	PortServeurRest=4000;
+	cout<<"Le port du serveur Rest indiqué est : "<<PortServeurRest<<"\n";
+	AddrEtPortServeurRest = AddrServeurRest;
+	AddrEtPortServeurRest +=":";
+	AddrEtPortServeurRest+=std::to_string(PortServeurRest);
+	cout<<"Adresse et Port du Serveur Rest : "<<AddrEtPortServeurRest<<endl;
+}
+
 int main(){
 	bool OK=true;
 	//AJOUTER 
@@ -172,21 +199,8 @@ int main(){
 	//cout port ServeurTCP 2085;
 	//cin IP serveur REST 172.18.110.111
 	//cout port serveur REST 3000
-	cout<<"Veuillez choisir le test Unitaire entre \"CAN\", \"SERVEURTCP\", \"CLIENTREST\", \"COMPLET\" : ";
-	cin>>testUnitaire;
-	cout<<"Le test Unitaire choisi est : "<<testUnitaire<<"\n";
-	cout<<"Veuillez choisir le port du Seveur TCP"<<"\n";
-	cin>>PortServeurTCP;
-	cout<<"Le port du serveur TCP choisi est : "<<"\n";
-	cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : "<<PortServeurTCP<<"\n";
-	cin>>AddrServeurRest;
-	cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
-	cout<<"Veuillez indiqué le port du Serveur Rest : "<<"\n";
-	cin>>PortServeurRest;
-	cout<<"Le port du serveur Rest indiqué est : "<<PortServeurRest<<"\n";
-	AddrEtPortServeurRest = AddrServeurRest;
-	AddrEtPortServeurRest +=":";
-	AddrEtPortServeurRest+=std::to_string(PortServeurRest);
+
+	Parametrage_Serveur();
 	if(testUnitaire=="CAN" || testUnitaire=="COMPLET")
 	{	string leCOM="/dev/ttyUSB0";
 		for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
