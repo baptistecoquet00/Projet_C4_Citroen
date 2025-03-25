@@ -52,60 +52,97 @@ exports.getSignificationsUnOctet = async (id, octet) => {
 exports.PostTrame = async (body) => {
   try {
     const { users, data } = body;
-
-    // Vérification du format JSON
     if (!users || !Array.isArray(data)) {
       return { error: "Format JSON invalide" };
     }
-
-    const errors = []; // Pour collecter les trames ignorées
-
+    const errors = [];
     for (const trame of data) {
       let { idCAN, lenData, Data } = trame;
-
-      // Nettoyage du "0x" et mise en majuscule
+      // Nettoyage des préfixes 0x éventuels
       idCAN = idCAN.replace(/^0x/i, '').toUpperCase();
       Data = Data.replace(/^0x/i, '').toUpperCase();
-
-      // ✅ Seules les Data de 16 caractères (8 octets) sont acceptées
-      if (Data.length !== 16) {
-        errors.push(`Trame ignorée : Data doit contenir exactement 8 octets (16 caractères) pour idCAN ${idCAN}, reçu : ${Data.length} caractères.`);
-        continue; // Passe à la suivante
+      // Vérification taille max
+      if (Data.length > 16) {
+        errors.push(`Trame ignorée : Data trop longue pour idCAN ${idCAN}. Limite : 16 caractères, reçu : ${Data.length}.`);
+        continue;
       }
-
-      // ✅ Découper en octets (paires de 2 caractères)
-      const octets = Data.match(/.{2}/g); // Va donner un tableau de 8 éléments
-
-      // ✅ Vérifier si le can_id existe déjà dans identifiants_can
+      // Compléter la donnée avec des '00' à droite pour avoir 16 caractères (8 octets)
+      Data = Data.padStart(16, '0'); // <--- PADSTART ici pour compléter à gauche si besoin
+      // Découper la data en paires de 2 caractères (octets)
+      const octets = Data.match(/.{2}/g); // ['FF', 'FF', ..., 'BB']
+      // Compléter à 8 octets si jamais lenData < 8
+      const finalOctets = Array(8 - octets.length).fill('00').concat(octets).slice(-8); // S'assure d'avoir 8 octets
+      // Vérifier et insérer dans identifiants_can si pas présent
       const checkQuery = `SELECT COUNT(*) FROM identifiants_can WHERE can_id = $1`;
       const checkResult = await db.query(checkQuery, [idCAN]);
-
       if (parseInt(checkResult.rows[0].count) === 0) {
-        // ✅ Ajouter can_id s'il n'existe pas
         const insertIdentifiantQuery = `INSERT INTO identifiants_can (can_id) VALUES ($1)`;
         await db.query(insertIdentifiantQuery, [idCAN]);
       }
-
-      // ✅ Insérer la trame complète
-      const insertTrameQuery = `
-        INSERT INTO trames_can (can_id, horodatage, octet_0, octet_1, octet_2, octet_3, octet_4, octet_5, octet_6, octet_7)
-        VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)
-      `;
-      await db.query(insertTrameQuery, [idCAN, ...octets]);
+      // Insertion dans trames_can
+      const insertTrameQuery = `INSERT INTO trames_can (can_id, horodatage, octet_7, octet_6, octet_5, octet_4, octet_3, octet_2, octet_1, octet_0)VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)`;
+      await db.query(insertTrameQuery, [idCAN, ...finalOctets]);
     }
-
-    // ✅ Réponse
     if (errors.length > 0) {
-      return { message: "Certaines trames ont été ignorées.", details: errors };
+      return { message: "Trames CAN traitées avec avertissements.", details: errors };
     } else {
-      return { message: "Toutes les trames CAN ont été traitées et insérées avec succès !" };
+      return { message: "Toutes les trames CAN ont été traitées avec succès." };
     }
-
   } catch (error) {
     console.error("Erreur lors de l'insertion des trames CAN :", error);
     return { error: "Erreur serveur" };
   }
 };
+// exports.PostTrame = async (body) => {
+//   try {
+//     const { users, data } = body;
+
+//     // Vérification du format JSON
+//     if (!users || !Array.isArray(data)) {
+//       return { error: "Format JSON invalide" };
+//     }
+
+//     const errors = []; // Pour collecter les trames ignorées
+
+//     for (const trame of data) {
+//       let { idCAN, lenData, Data } = trame;
+
+//       // Nettoyage du "0x" et mise en majuscule
+//       idCAN = idCAN.replace(/^0x/i, '').toUpperCase();
+//       Data = Data.replace(/^0x/i, '').toUpperCase();
+
+//       if (Data.length !== 16) {
+//         errors.push(`Trame ignorée : Data doit contenir exactement 8 octets (16 caractères) pour idCAN ${idCAN}, reçu : ${Data.length} caractères.`);
+//         continue; // Passe à la suivante
+//       }
+
+//       const octets = Data.match(/.{2}/g); // Va donner un tableau de 8 éléments
+//       const checkQuery = `SELECT COUNT(*) FROM identifiants_can WHERE can_id = $1`;
+//       const checkResult = await db.query(checkQuery, [idCAN]);
+
+//       if (parseInt(checkResult.rows[0].count) === 0) {
+//         const insertIdentifiantQuery = `INSERT INTO identifiants_can (can_id) VALUES ($1)`;
+//         await db.query(insertIdentifiantQuery, [idCAN]);
+//       }
+
+//       const insertTrameQuery = `
+//         INSERT INTO trames_can (can_id, horodatage, octet_0, octet_1, octet_2, octet_3, octet_4, octet_5, octet_6, octet_7)
+//         VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)
+//       `;
+//       await db.query(insertTrameQuery, [idCAN, ...octets]);
+//     }
+
+//     if (errors.length > 0) {
+//       return { message: "Certaines trames ont été ignorées.", details: errors };
+//     } else {
+//       return { message: "Toutes les trames CAN ont été traitées et insérées avec succès !" };
+//     }
+
+//   } catch (error) {
+//     console.error("Erreur lors de l'insertion des trames CAN :", error);
+//     return { error: "Erreur serveur" };
+//   }
+// };
 // exports.PostTrame = async (body) => { // On récupère directement `body`
 //   try {
 //     const { users, data } = body; // Extraction des données

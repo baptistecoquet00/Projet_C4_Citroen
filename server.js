@@ -4,21 +4,22 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 
-app.use(cors());
-
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 // Routes
-const indexRoutes = require('./routes/index');
-const apiRoutes = require('./routes/api');
-
+const indexRoutes = require('./routes/web/index');
+const apiRoutes = require('./routes/api/api');
 
 // Routes
-app.use('/', indexRoutes);
 app.use('/api', apiRoutes);
+app.use('/', indexRoutes);
+app.set('view engine','ejs');
+app.set('views ','./views');
 
 // Démarrer le serveur
 const PORT = 3000;
