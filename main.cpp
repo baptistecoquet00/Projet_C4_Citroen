@@ -164,32 +164,36 @@ void EnvoyerDonneesAuServeurREST(string addrEtPortServeur, string jsonstr)
 {	int LengthJSON;
 	for(int i = 0;i<jsonstr.length();i++) LengthJSON =i;
 	string LengthJSONstr = std::to_string(LengthJSON+1);
-	string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: "+addrEtPortServeur+"\r\nContent-Length: "+(LengthJSONstr)+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"";
-	//cout<<"Requete HTTP : "<<requete<<endl;
+	string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: "+addrEtPortServeur+"\r\nContent-Length: "+(LengthJSONstr)+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"\n";
+	cout<<"Requete HTTP : "<<requete<<endl;
 	client.Envoyer(requete);
 }
 
 void Parametrage_Serveur(){
 	cout<<"Veuillez choisir le test Unitaire entre \"CAN\", \"SERVEURTCP\", \"CLIENTREST\", \"COMPLET\" : ";
-	//cin>>testUnitaire;
-	testUnitaire ="COMPLET";
+	cin>>testUnitaire;
+	//testUnitaire ="COMPLET";
 	cout<<"Le test Unitaire choisi est : "<<testUnitaire<<"\n";
+	if(testUnitaire=="SERVEURTCP" || testUnitaire=="COMPLET"){
 	cout<<"Veuillez choisir le port du Seveur TCP : ";
 	//cin>>PortServeurTCP;
 	PortServeurTCP =2085;
 	cout<<"Le port du serveur TCP choisi est : "<<PortServeurTCP<<"\n";
-	cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : ";
-	//cin>>AddrServeurRest;
-	AddrServeurRest="172.20.21.73";
-	cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
-	cout<<"Veuillez indiqué le port du Serveur Rest : ";
-	//cin>>PortServeurRest;
-	PortServeurRest=4000;
-	cout<<"Le port du serveur Rest indiqué est : "<<PortServeurRest<<"\n";
-	AddrEtPortServeurRest = AddrServeurRest;
-	AddrEtPortServeurRest +=":";
-	AddrEtPortServeurRest+=std::to_string(PortServeurRest);
-	cout<<"Adresse et Port du Serveur Rest : "<<AddrEtPortServeurRest<<endl;
+	}
+	if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET"){
+		cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : ";
+		//cin>>AddrServeurRest;
+		AddrServeurRest="172.20.21.73";
+		cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
+		cout<<"Veuillez indiqué le port du Serveur Rest : ";
+		//cin>>PortServeurRest;
+		PortServeurRest=4000;
+		cout<<"Le port du serveur Rest indiqué est : "<<PortServeurRest<<"\n";
+		AddrEtPortServeurRest = AddrServeurRest;
+		AddrEtPortServeurRest +=":";
+		AddrEtPortServeurRest+=std::to_string(PortServeurRest);
+		cout<<"Adresse et Port du Serveur Rest : "<<AddrEtPortServeurRest<<endl;
+	}
 }
 
 int main(){
@@ -217,7 +221,7 @@ int main(){
 	}	
 	if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET")
 	{	cout<<"Connexion au Serveur REST......"<<endl;
-		if(client.SeConnecterAUnServeur("172.20.21.73",4000)){
+		if(client.SeConnecterAUnServeur(AddrServeurRest,PortServeurRest)){
 		//if(client.SeConnecterAUnServeur("172.18.110.111",3000)){
 			cout<<"Connexion REST : OK"<<endl;
 		}else{
@@ -241,7 +245,7 @@ int main(){
 		usleep(2000000);
 		if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET")
 		{	//EnvoyerDonneesAuServeurREST("172.18.110.111:3000",leJSON);			
-			EnvoyerDonneesAuServeurREST("172.20.21.73:4000",leJSON);			
+			EnvoyerDonneesAuServeurREST(AddrEtPortServeurRest,leJSON);			
 		}
 	}
 	//serveur.FermerCommunication();

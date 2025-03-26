@@ -77,6 +77,10 @@ public:
         @return Cette méthode renvoie le nombre d'octets reçus. En cas d'échec, cette méthode renvoie 0 ou une valeur négative.
     */  
     bool ClientEstConnecte();
+    /*!
+        @brief Méthode permettant si le client est toujours connecté au Serveur.
+        @return retourne True si le client est toujours connecté et sinon False dans le cas contraire et ferme la communication.
+    */
     void FermerCommunication();
     /*!
         @brief Méthode permettant de fermer la communication avec le client.
