@@ -14,32 +14,18 @@
 #include "ClientTCP.h"
 typedef char _TCHAR;
 #define _tmain main
+string testUnitaire="CLIENTREST";
+//"CAN", "SERVEURTCP", "CLIENTREST", "COMPLET"
 
 using namespace std;
 
-/*Prévoir fichier texte :
-4	//(1)CAN (2)SERVEURTCP (3)CLIENTREST (4)COMPLET
-/dev/ttyUSB0	//Port USB
-2085	//Port serveur Raspberry
-172.20.21.73	//IP serveur REST
-4000	//Port serveur REST
-*/
-string testUnitaire;
-//"CAN", "SERVEURTCP", "CLIENTREST", "COMPLET"
-
 VSCOM vscom;
 ServeurTCP serveur("0.0.0.0",2085);
-bool EnvoiTrameCAN=false;
+JSONFile json("TestUser","CAN.json");
 ClientTCP client;
 int nbTrames[2048];
 string tabDonneesFormatee[2048];
-DonneeCAN tabDonnees[2048];
-int PortServeurTCP,PortServeurRest;
-string AddrServeurRest;
-string AddrEtPortServeurRest;     //11 bits
-DonneeCAN donneeAEnvoyer;
-string messageCANAEnvoyer;
-
+DonneeCAN tabDonnees[2048];     //11 bits
 const std::string currentDateTime() {
     time_t now = time(0);
     struct tm tstruct;
@@ -48,7 +34,6 @@ const std::string currentDateTime() {
     strftime(buf, sizeof(buf), "%Y-%m-%d.%X", & tstruct);
     return buf;
 }
-
 void SauvegarderDonneesCAN()
 {	ofstream fichierDonneeCAN;
 	fichierDonneeCAN.open("DonneeCAN.log");
@@ -88,7 +73,6 @@ void ChargerDonneesCAN()
 }
 void * ThreadVSCOM(void * pDataBis)
 {	while(true)
-	if(!EnvoiTrameCAN)
 	{	DonneeCAN d=vscom.ReceptionTrameFormatee();
 		if(d.identifiant)
 		{	tabDonnees[d.identifiant].identifiant=d.identifiant;
@@ -100,14 +84,7 @@ void * ThreadVSCOM(void * pDataBis)
 			sprintf(donnee,"%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X",d.donnee[0],d.donnee[1],d.donnee[2],d.donnee[3],d.donnee[4],d.donnee[5],d.donnee[6],d.donnee[7]);
 			sprintf(trameFormatee,"%.3X [ %d octets ] : %s",d.identifiant,d.longueur,donnee);
 			tabDonneesFormatee[d.identifiant]=trameFormatee;
-			//cout<<"Lecture bus CAN ID : "<<d.identifiant<<endl;
 		}
-	}
-	else
-	{	vscom.EnvoiTrameCAN(donneeAEnvoyer,true);
-		cout<<"Envoi de la trame CAN : "<<messageCANAEnvoyer<<endl;
-		usleep(500000);
-		EnvoiTrameCAN=false;	
 	}
 }
 void * ThreadServeur(void * pDataBis)
@@ -115,7 +92,7 @@ void * ThreadServeur(void * pDataBis)
 	bool connecte = true;
 	while(connecte)
 	{	//message du client
-		int nbOctets=serveur.Recevoir(message,1501);
+		int nbOctets=serveur.Recevoir(message,1500);
 		if(nbOctets)          //si "0" : envoi de toutes les trames //CODER ENVOITRAMECAN(DONNEE)
 		{	message[nbOctets]=0;
 			//cout<<"Message du client recue : "<<message<<endl;
@@ -124,104 +101,81 @@ void * ThreadServeur(void * pDataBis)
 			sscanf(message,"%X",&id);
 			//"115 [ 4 octets ] : 0800000000000000"
 			if(strlen(message)>3 && message[4]=='[' && message[15]==']')
-			{	cout<<"Message du client (trame complete) : "<<message<<endl;
-				sscanf(message,"%X [ %d octets ] : %s",&id,&r_long,r_donnees);
+			{	sscanf(message,"%X [ %d octets ] : %s",&id,&r_long,r_donnees);
 				//cout<<"="<<id<<"="<<r_long<<"="; //cout<<r_donnees<<endl;
 				for(int rd=0;rd<8;rd++) r_donnee[rd]=SNIR::ChaineHexaVersInt(r_donnees+2*rd,2);
 				//for(int rd=0;rd<8;rd++)cout<<(int)r_donnee[rd]<<" ";cout<<endl;
+				DonneeCAN donneeAEnvoyer;
 				donneeAEnvoyer.identifiant=id;
 				donneeAEnvoyer.longueur=r_long;
 				donneeAEnvoyer.requete=false;
-				messageCANAEnvoyer=message;
 				for(int rd=0;rd<8;rd++){donneeAEnvoyer.donnee[rd]=r_donnee[rd];} 
-				if(testUnitaire=="COMPLET")
-				{	EnvoiTrameCAN=true;
-				}
+				vscom.EnvoiTrameCAN(donneeAEnvoyer,true);
 			}
 			else
 			{   if(id)
-				{	serveur.Envoyer((char*)tabDonneesFormatee[id].c_str(),tabDonneesFormatee[id].length());
+				{
+					serveur.Envoyer((char*)tabDonneesFormatee[id].c_str(),tabDonneesFormatee[id].length());
 				}
 				else
-				{	for(int i=0;i<2048;i++)
-					{	if(tabDonnees[i].identifiant)
+				{
+					for(int i=0;i<2048;i++)
+					{	
+						if(tabDonnees[i].identifiant)
 						{	serveur.Envoyer((char*)(tabDonneesFormatee[i]+"\n").c_str(),tabDonneesFormatee[i].length()+1);
 						}
 					}
 				}
-			cout<<"Message du client (identifiant) : "<<message<<endl;
+				//cout<<"Message du client : "<<tabDonneesFormatee<<endl;
 			}	
 		}
+		else // Si nbOctets vaut 0, envoyer toutes les trames
+        {
+            for (int i = 0; i < 2048; i++)
+            {
+                if (tabDonnees[i].identifiant)
+                {
+                    serveur.Envoyer((char*)(tabDonneesFormatee[i] + "\n").c_str(), tabDonneesFormatee[i].length() + 1);
+                }
+            }
+        }
 	}
 }
 
-string AffichageDonneeCAN_CreationJSON()
-{	JSONFile json("TestUser","CAN.json");
+void affichageDonneeCAN()
+{
 	cout<<endl<<endl<<"=============================================="<<endl;
-	//"0B6 [ 8 octets ] : 5600160041547ED0"
-	for(int i=0;i<2048;i++)
-	{	if(tabDonnees[i].identifiant)
-		{	printf("%.3X ",tabDonnees[i].identifiant);
-			cout<<"\t"<<tabDonnees[i].longueur<<"\t";
-			for(int j=0;j<8;j++)
-			{	printf("%.2X ",tabDonnees[i].donnee[j]);
+		//"0B6 [ 8 octets ] : 5600160041547ED0"
+		
+		for(int i=0;i<2048;i++)
+		{	if(tabDonnees[i].identifiant)
+			{	printf("%.3X ",tabDonnees[i].identifiant);
+				cout<<"\t"<<tabDonnees[i].longueur<<"\t";
+				for(int j=0;j<8;j++)
+				{	printf("%.2X ",tabDonnees[i].donnee[j]);
+				}
+				cout<<" nb : "<<nbTrames[i];
+				cout<<endl;	
+				json.AjouterDonneesJSON(tabDonnees[i].identifiant, tabDonnees[i].longueur, tabDonnees[i].donnee);		
 			}
-			cout<<" nb : "<<nbTrames[i];
-			cout<<endl;	
-			json.AjouterDonneesJSON(tabDonnees[i].identifiant, tabDonnees[i].longueur, tabDonnees[i].donnee);		
 		}
-	}
-	json.CloreJSON();
+		json.CloreJSON();
 	cout<<"=============================================="<<endl<<endl<<endl;
-	return json.getJSON();
 }
-void EnvoyerDonneesAuServeurREST(string addrEtPortServeur, string jsonstr)
-{	int LengthJSON;
+
+void EnvoyerDonneesAuServeurREST(string addrEtPortServeur)
+{
+	string jsonstr = json.getJSON();
+	int LengthJSON;
 	for(int i = 0;i<jsonstr.length();i++) LengthJSON =i;
 	string LengthJSONstr = std::to_string(LengthJSON+1);
-	string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: "+addrEtPortServeur+"\r\nContent-Length: "+(LengthJSONstr)+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"\n";
+	string requete = "POST /api/trame HTTP/1.1\r\nContent-Type: application/json\r\nHost: "+addrEtPortServeur+"\r\nContent-Length: "+(LengthJSONstr)+"\r\nConnection: keep-alive\r\n\r\n"+jsonstr+"";
 	cout<<"Requete HTTP : "<<requete<<endl;
 	client.Envoyer(requete);
 }
 
-void Parametrage_Serveur(){
-	cout<<"Veuillez choisir le test Unitaire entre \"CAN\", \"SERVEURTCP\", \"CLIENTREST\", \"COMPLET\" : ";
-	cin>>testUnitaire;
-	//testUnitaire ="COMPLET";
-	cout<<"Le test Unitaire choisi est : "<<testUnitaire<<"\n";
-	if(testUnitaire=="SERVEURTCP" || testUnitaire=="COMPLET"){
-	cout<<"Veuillez choisir le port du Seveur TCP : ";
-	//cin>>PortServeurTCP;
-	PortServeurTCP =2085;
-	cout<<"Le port du serveur TCP choisi est : "<<PortServeurTCP<<"\n";
-	}
-	if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET"){
-		cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : ";
-		//cin>>AddrServeurRest;
-		//AddrServeurRest="172.20.21.73";
-		//AddrServeurRest="172.20.21.26";
-		AddrServeurRest="172.18.110.111";
-		PortServeurRest=3000;
-		cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
-		cout<<"Veuillez indiqué le port du Serveur Rest : ";
-		//cin>>PortServeurRest;
-		cout<<"Le port du serveur Rest indiqué est : "<<PortServeurRest<<"\n";
-		AddrEtPortServeurRest = AddrServeurRest;
-		AddrEtPortServeurRest +=":";
-		AddrEtPortServeurRest+=std::to_string(PortServeurRest);
-		cout<<"Adresse et Port du Serveur Rest : "<<AddrEtPortServeurRest<<endl;
-	}
-}
-
 int main(){
 	bool OK=true;
-	//AJOUTER 
-	//cin "CAN", "SERVEURTCP", "CLIENTREST", "COMPLET"
-	//cout port ServeurTCP 2085;
-	//cin IP serveur REST 172.18.110.111
-	//cout port serveur REST 3000
-
-	Parametrage_Serveur();
 	if(testUnitaire=="CAN" || testUnitaire=="COMPLET")
 	{	string leCOM="/dev/ttyUSB0";
 		for(int i=0;i<2048;i++) {tabDonnees[i].identifiant=0;nbTrames[i]=0;}
@@ -238,8 +192,8 @@ int main(){
 	}	
 	if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET")
 	{	cout<<"Connexion au Serveur REST......"<<endl;
-		if(client.SeConnecterAUnServeur(AddrServeurRest,PortServeurRest)){
-		//if(client.SeConnecterAUnServeur("172.18.110.111",3000)){
+		//if(client.SeConnecterAUnServeur("172.20.21.26",3000)){
+		if(client.SeConnecterAUnServeur("172.18.110.111",3000)){
 			cout<<"Connexion REST : OK"<<endl;
 		}else{
 			cout<<"Connexion REST : NOK"<<endl;
@@ -255,20 +209,27 @@ int main(){
 	{	ChargerDonneesCAN();
 	}
 	while(OK)
-	{   	string leJSON=AffichageDonneeCAN_CreationJSON();
-		if(testUnitaire=="CAN" || testUnitaire=="COMPLET")
-		{	SauvegarderDonneesCAN();
-		}
-		usleep(2000000);
-		if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET")
-		{	//EnvoyerDonneesAuServeurREST("172.18.110.111:3000",leJSON);			
-			EnvoyerDonneesAuServeurREST(AddrEtPortServeurRest,leJSON);			
-		}
-	}
-	//serveur.FermerCommunication();
-	//vscom.DeconnexionVSCOM();
-	//vscom.FermerCOM();
-	return 0;
+	{   	
+			affichageDonneeCAN();
+			if(testUnitaire=="CAN" || testUnitaire=="COMPLET")
+			{	SauvegarderDonneesCAN();
+			}
+			usleep(2000000);
+			EnvoyerDonneesAuServeurREST("172.18.110.111:3000");			
+/*			if(!serveur.ClientEstConnecte())
+			{
+				cout<<"Le client n'est plus connecté."<<endl;
+				cout << "FERMETURE SOCKET" << endl;
+				serveur.FermerCommunication();
+				cout<< "DECONNEXION VSCOM"<<endl;
+				vscom.DeconnexionVSCOM();
+				cout<< "FERMETURE COM"<<endl;
+				vscom.FermerCOM();
+				OK = false;
+				break;
+			}*/
+	 }
+    return 0;
 }
 
 
