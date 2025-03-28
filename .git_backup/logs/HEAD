@@ -1,0 +1,51 @@
+0000000000000000000000000000000000000000 51041d7376bd724092e50ff3f1faa7b67421a350 Baptiste Coquet <bcoquet03@gmail.com> 1737014378 +0100	commit (initial): first commit
+51041d7376bd724092e50ff3f1faa7b67421a350 0000000000000000000000000000000000000000 Baptiste Coquet <bcoquet03@gmail.com> 1737014379 +0100	Branch: renamed refs/heads/main to refs/heads/main
+51041d7376bd724092e50ff3f1faa7b67421a350 51041d7376bd724092e50ff3f1faa7b67421a350 Baptiste Coquet <bcoquet03@gmail.com> 1737014379 +0100	Branch: renamed refs/heads/main to refs/heads/main
+51041d7376bd724092e50ff3f1faa7b67421a350 0000000000000000000000000000000000000000 Baptiste Coquet <bcoquet03@gmail.com> 1737014426 +0100	Branch: renamed refs/heads/main to refs/heads/main
+51041d7376bd724092e50ff3f1faa7b67421a350 51041d7376bd724092e50ff3f1faa7b67421a350 Baptiste Coquet <bcoquet03@gmail.com> 1737014426 +0100	Branch: renamed refs/heads/main to refs/heads/main
+51041d7376bd724092e50ff3f1faa7b67421a350 51041d7376bd724092e50ff3f1faa7b67421a350 COQUET Baptiste <bcoquet03@gmail.com> 1737359820 +0100	checkout: moving from main to main
+51041d7376bd724092e50ff3f1faa7b67421a350 51041d7376bd724092e50ff3f1faa7b67421a350 COQUET Baptiste <bcoquet03@gmail.com> 1737359825 +0100	checkout: moving from main to main
+51041d7376bd724092e50ff3f1faa7b67421a350 57ca25719f3f127a85c14f462dd810561e211203 Baptiste Coquet <bcoquet03@gmail.com> 1737446172 +0100	commit: Le Serveur TCP marche
+57ca25719f3f127a85c14f462dd810561e211203 57ca25719f3f127a85c14f462dd810561e211203 Baptiste Coquet <bcoquet03@gmail.com> 1737446729 +0100	checkout: moving from main to ServeurTCP
+57ca25719f3f127a85c14f462dd810561e211203 2a2a58f927a906961149206bd1028f2b92816f51 Baptiste Coquet <bcoquet03@gmail.com> 1737446762 +0100	commit: Serveur TCP fonctionnelle
+2a2a58f927a906961149206bd1028f2b92816f51 57ca25719f3f127a85c14f462dd810561e211203 Baptiste Coquet <bcoquet03@gmail.com> 1737446874 +0100	checkout: moving from ServeurTCP to main
+57ca25719f3f127a85c14f462dd810561e211203 57ca25719f3f127a85c14f462dd810561e211203 Baptiste Coquet <bcoquet03@gmail.com> 1737625545 +0100	checkout: moving from main to main
+57ca25719f3f127a85c14f462dd810561e211203 2a2a58f927a906961149206bd1028f2b92816f51 Baptiste Coquet <bcoquet03@gmail.com> 1737625594 +0100	checkout: moving from main to ServeurTCP
+2a2a58f927a906961149206bd1028f2b92816f51 0d437eeeec41b3d4a0bc67f6855c753a6cb3eb37 Baptiste Coquet <bcoquet03@gmail.com> 1737627724 +0100	commit: Correction du Serveur
+0d437eeeec41b3d4a0bc67f6855c753a6cb3eb37 79c0d8065940a591612dd2444f36e798b3d27160 Baptiste Coquet <bcoquet03@gmail.com> 1737716187 +0100	commit: Serveur pas tres fonctionnelle
+79c0d8065940a591612dd2444f36e798b3d27160 7ec409e7d7445c29a9fe941e871c6de65aa1e16e Baptiste Coquet <bcoquet03@gmail.com> 1738759268 +0100	commit: Serveur qui reçoit les données de la voiture
+7ec409e7d7445c29a9fe941e871c6de65aa1e16e 5991fa3cda33f1bfc128daa2abb4844ea99adc9a Baptiste Coquet <bcoquet03@gmail.com> 1738837790 +0100	commit: Le thread marche
+5991fa3cda33f1bfc128daa2abb4844ea99adc9a 5991fa3cda33f1bfc128daa2abb4844ea99adc9a Baptiste Coquet <bcoquet03@gmail.com> 1739180609 +0100	checkout: moving from ServeurTCP to ServeurTCP_2
+5991fa3cda33f1bfc128daa2abb4844ea99adc9a 550faa695c12662a5c31228089a26da215679bc4 Baptiste Coquet <bcoquet03@gmail.com> 1739180634 +0100	commit: ServeurTCP fonctionnelle
+550faa695c12662a5c31228089a26da215679bc4 569d7a11379dc19750cf73bf7ab6c6eff54f8f72 Baptiste Coquet <bcoquet03@gmail.com> 1739182390 +0100	commit: Ajout de commentaire sur la classe Serveur TCP
+569d7a11379dc19750cf73bf7ab6c6eff54f8f72 af2c6cdd1851a4049ecdd112d27042a4d3ed3479 Baptiste Coquet <bcoquet03@gmail.com> 1739182480 +0100	commit: Ajout de commentaire sur la classe Serveur TCP
+af2c6cdd1851a4049ecdd112d27042a4d3ed3479 4f55773fcb9396e4e669acd10c920dc578657b68 Baptiste Coquet <bcoquet03@gmail.com> 1739182791 +0100	commit: Ajout de commentaire sur la classe Serveur TCP
+4f55773fcb9396e4e669acd10c920dc578657b68 4f55773fcb9396e4e669acd10c920dc578657b68 Baptiste Coquet <bcoquet03@gmail.com> 1739371231 +0100	checkout: moving from ServeurTCP_2 to ExotestThreadServeur
+4f55773fcb9396e4e669acd10c920dc578657b68 f6fbbf3656da0732426e5373e8080d16c50a5e36 Baptiste Coquet <bcoquet03@gmail.com> 1739371261 +0100	commit: Essaie de réduire le main en une classe
+f6fbbf3656da0732426e5373e8080d16c50a5e36 2ff9e033d4c0f4220117382aaccede8c437ef9af Baptiste Coquet <bcoquet03@gmail.com> 1739375200 +0100	commit: Essaie de réduire le main en une classe et amélioration ServeurTCP
+2ff9e033d4c0f4220117382aaccede8c437ef9af c3fe99e6ca87064ff34da47bd066ff90edf71d54 Baptiste Coquet <bcoquet03@gmail.com> 1739375645 +0100	commit: Essaie de réduire le main en une classe et amélioration ServeurTCP
+c3fe99e6ca87064ff34da47bd066ff90edf71d54 022fc8de38c28a10029284344fbd784f40eab29d Baptiste Coquet <bcoquet03@gmail.com> 1739528644 +0100	commit: Faire fichier json
+022fc8de38c28a10029284344fbd784f40eab29d 715c45d630d9ecfcf8b000b5ce27158c37e32ec8 Baptiste Coquet <bcoquet03@gmail.com> 1739538765 +0100	commit: Faire fichier json
+715c45d630d9ecfcf8b000b5ce27158c37e32ec8 2d14e140203c1999d2833f5eb373c97ef2e6d7c7 Baptiste Coquet <bcoquet03@gmail.com> 1740996398 +0100	commit: classe JSON non-fonctionnelle
+2d14e140203c1999d2833f5eb373c97ef2e6d7c7 6ab9fe9af9cae708b7e9a1c5744058ace21edee3 Baptiste Coquet <bcoquet03@gmail.com> 1741082451 +0100	commit: classe JSON qui compile
+6ab9fe9af9cae708b7e9a1c5744058ace21edee3 54b6384cd95c617d06fa32896dbc6717180a93b4 Baptiste Coquet <bcoquet03@gmail.com> 1741085512 +0100	commit: Essaie de faire fonctionner le ficher json
+54b6384cd95c617d06fa32896dbc6717180a93b4 54b6384cd95c617d06fa32896dbc6717180a93b4 Baptiste Coquet <bcoquet03@gmail.com> 1741253585 +0100	checkout: moving from ExotestThreadServeur to Fichier_JSON
+54b6384cd95c617d06fa32896dbc6717180a93b4 f6ae9264d572c6756b223deb05701e035788ff1f Baptiste Coquet <bcoquet03@gmail.com> 1741253609 +0100	commit: problème avec la classe JSONFILE
+f6ae9264d572c6756b223deb05701e035788ff1f fc5ff1c93fafba1f323e5637828ec90862c865f1 Baptiste Coquet <bcoquet03@gmail.com> 1741354473 +0100	commit: JSON ne marche tjs pas
+fc5ff1c93fafba1f323e5637828ec90862c865f1 fc5ff1c93fafba1f323e5637828ec90862c865f1 Baptiste Coquet <bcoquet03@gmail.com> 1741859987 +0100	checkout: moving from Fichier_JSON to Fichier_JSON_REUSSI
+fc5ff1c93fafba1f323e5637828ec90862c865f1 4e234cce947e68df5b7923c12dab4f58588368b8 Baptiste Coquet <bcoquet03@gmail.com> 1741860017 +0100	commit: Reception et Envoi JSON fait
+4e234cce947e68df5b7923c12dab4f58588368b8 9b288529e377bba12c3443330e0ec82f8728ea78 Baptiste Coquet <bcoquet03@gmail.com> 1741860426 +0100	commit: Reception et Envoi JSON fait
+9b288529e377bba12c3443330e0ec82f8728ea78 38e7886f12b3783ce505a342b0cdafec45facfc4 Baptiste Coquet <bcoquet03@gmail.com> 1741860522 +0100	commit: Reception et Envoi JSON fait
+38e7886f12b3783ce505a342b0cdafec45facfc4 d6ea8e46f0b70068c770bc6abdcb456c2b0d89ef Baptiste Coquet <bcoquet03@gmail.com> 1741861332 +0100	commit: Code main.cpp plus propre
+d6ea8e46f0b70068c770bc6abdcb456c2b0d89ef 36e268d7574b621eada714ced5147e97f3c0ef9e Baptiste Coquet <bcoquet03@gmail.com> 1741960683 +0100	commit: Serveur envoie JSON
+36e268d7574b621eada714ced5147e97f3c0ef9e 36e268d7574b621eada714ced5147e97f3c0ef9e Baptiste Coquet <bcoquet03@gmail.com> 1742207572 +0100	checkout: moving from Fichier_JSON_REUSSI to Gestion_temps_du_code
+36e268d7574b621eada714ced5147e97f3c0ef9e a7ddaad6c38cf08a357ef302f080bf908c52674d Baptiste Coquet <bcoquet03@gmail.com> 1742207585 +0100	commit: gestion temps
+a7ddaad6c38cf08a357ef302f080bf908c52674d a7ddaad6c38cf08a357ef302f080bf908c52674d Baptiste Coquet <bcoquet03@gmail.com> 1742390253 +0100	checkout: moving from Gestion_temps_du_code to Creation_Nouvelle_Classe
+a7ddaad6c38cf08a357ef302f080bf908c52674d 8c6aa26c1ff7d2c8384d3e911d8666c6b79754f0 Baptiste Coquet <bcoquet03@gmail.com> 1742390280 +0100	commit: Division du code en plusieurs fonctions
+8c6aa26c1ff7d2c8384d3e911d8666c6b79754f0 af0187d53961485b19a2bae398884d80fcc4b733 Baptiste Coquet <bcoquet03@gmail.com> 1742390331 +0100	commit: Division du code en plusieurs fonctions
+af0187d53961485b19a2bae398884d80fcc4b733 7310f655569786394023d30d29de6f6031a1d3f9 Baptiste Coquet <bcoquet03@gmail.com> 1742555047 +0100	commit: Parametre
+7310f655569786394023d30d29de6f6031a1d3f9 7310f655569786394023d30d29de6f6031a1d3f9 Baptiste Coquet <bcoquet03@gmail.com> 1742811530 +0100	checkout: moving from Creation_Nouvelle_Classe to Injection_Voiture
+7310f655569786394023d30d29de6f6031a1d3f9 4ef35d1f61758b8b4d7bc90dd2d00500005bf220 Baptiste Coquet <bcoquet03@gmail.com> 1742811571 +0100	commit: Essaie de spamer des injections dans la voiture
+                                                                                                                                                                                                     2ff9e033d4c0f4220117382aaccede8c437ef9af 2ff9e033d4c0f4220117382aaccede8c437ef9af Baptiste Coquet <bcoquet03@gmail.com> 1743159563 +0100	checkout: moving from Injection_Voiture to Fichier_Conf
+2ff9e033d4c0f4220117382aaccede8c437ef9af ad86f90d3598247f1d8d0b2c6744784b7c90c22c Baptiste Coquet <bcoquet03@gmail.com> 1743159579 +0100	commit: Test de fichier config
+af0187d53961485b19a2bae398884d80fcc4b733 ec1a8d0836b18c081ea56dc92303cc2c898fa367 Baptiste Coquet <bcoquet03@gmail.com> 1743163756 +0100	commit: Test de fichier config

@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 fc5ff1c93fafba1f323e5637828ec90862c865f1 Baptiste Coquet <bcoquet03@gmail.com> 1741859987 +0100	branch: Created from HEAD
+fc5ff1c93fafba1f323e5637828ec90862c865f1 4e234cce947e68df5b7923c12dab4f58588368b8 Baptiste Coquet <bcoquet03@gmail.com> 1741860017 +0100	commit: Reception et Envoi JSON fait
+4e234cce947e68df5b7923c12dab4f58588368b8 9b288529e377bba12c3443330e0ec82f8728ea78 Baptiste Coquet <bcoquet03@gmail.com> 1741860426 +0100	commit: Reception et Envoi JSON fait
+9b288529e377bba12c3443330e0ec82f8728ea78 38e7886f12b3783ce505a342b0cdafec45facfc4 Baptiste Coquet <bcoquet03@gmail.com> 1741860522 +0100	commit: Reception et Envoi JSON fait
+38e7886f12b3783ce505a342b0cdafec45facfc4 d6ea8e46f0b70068c770bc6abdcb456c2b0d89ef Baptiste Coquet <bcoquet03@gmail.com> 1741861332 +0100	commit: Code main.cpp plus propre
+d6ea8e46f0b70068c770bc6abdcb456c2b0d89ef 36e268d7574b621eada714ced5147e97f3c0ef9e Baptiste Coquet <bcoquet03@gmail.com> 1741960683 +0100	commit: Serveur envoie JSON
