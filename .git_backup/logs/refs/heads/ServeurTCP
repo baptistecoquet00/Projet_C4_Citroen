@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 57ca25719f3f127a85c14f462dd810561e211203 Baptiste Coquet <bcoquet03@gmail.com> 1737446729 +0100	branch: Created from HEAD
+57ca25719f3f127a85c14f462dd810561e211203 2a2a58f927a906961149206bd1028f2b92816f51 Baptiste Coquet <bcoquet03@gmail.com> 1737446762 +0100	commit: Serveur TCP fonctionnelle
+2a2a58f927a906961149206bd1028f2b92816f51 0d437eeeec41b3d4a0bc67f6855c753a6cb3eb37 Baptiste Coquet <bcoquet03@gmail.com> 1737627724 +0100	commit: Correction du Serveur
+0d437eeeec41b3d4a0bc67f6855c753a6cb3eb37 79c0d8065940a591612dd2444f36e798b3d27160 Baptiste Coquet <bcoquet03@gmail.com> 1737716187 +0100	commit: Serveur pas tres fonctionnelle
+79c0d8065940a591612dd2444f36e798b3d27160 7ec409e7d7445c29a9fe941e871c6de65aa1e16e Baptiste Coquet <bcoquet03@gmail.com> 1738759268 +0100	commit: Serveur qui reçoit les données de la voiture
+7ec409e7d7445c29a9fe941e871c6de65aa1e16e 5991fa3cda33f1bfc128daa2abb4844ea99adc9a Baptiste Coquet <bcoquet03@gmail.com> 1738837790 +0100	commit: Le thread marche

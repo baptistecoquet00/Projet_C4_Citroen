@@ -1,0 +1,4 @@
+config_server:
+  serverTCP_port: 2085
+  addrServerRest: '186.50.61.73'
+  PortServerRest: 3008

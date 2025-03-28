@@ -1,0 +1,25 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/baptistecoquet00/Projet_C4_Citroen/
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "Fichier_JSON_REUSSI"]
+	remote = origin
+	merge = refs/heads/Fichier_JSON_REUSSI
+[branch "Gestion_temps_du_code"]
+	remote = origin
+	merge = refs/heads/Gestion_temps_du_code
+	vscode-merge-base = origin/Fichier_JSON_REUSSI
+	vscode-merge-base = origin/Fichier_JSON_REUSSI
+[branch "Creation_Nouvelle_Classe"]
+	remote = origin
+	vscode-merge-base = origin/Gestion_temps_du_code
+	merge = refs/heads/Creation_Nouvelle_Classe
+[branch "Injection_Voiture"]
+	vscode-merge-base = origin/Creation_Nouvelle_Classe
+	vscode-merge-base = origin/Creation_Nouvelle_Classe
+	remote = origin
+	merge = refs/heads/Injection_Voiture
