@@ -1,25 +1,29 @@
-#include <iostream>
 #include "Config_yaml.h"
+#include <iostream>
+#include <stdexcept>
 
 int main() {
-    Config_yaml config;//("Config_Serveur.yml");
-    
-    if (!config.LireFichierYaml()) {
-        std::cerr << "Failed to load config file" << "\n";
-        return 1;
-    }
-
     try {
-        int tcpPort = config.getInt("config_serveur", "serveurTCP_port");
-        std::string restAddr = config.getString("config_serveur.ServeurRest", "addrServeurRest");
-        int restPort = config.getInt("config_serveur.ServeurRest", "PortServeurRest");
+        // 1. Créer et charger le fichier YAML
+        Config_yaml config;
+        if (!config.LireFichierYaml()) {
+            std::cerr << "Erreur : Impossible d'ouvrir le fichier YAML." << std::endl;
+            return 1;
+        }
 
-        std::cout << "Configuration loaded:" << std::endl;
-        std::cout << "TCP Port: " << tcpPort << std::endl;
-        std::cout << "REST Address: " << restAddr << std::endl;
-        std::cout << "REST Port: " << restPort << std::endl;
+        // 2. Accéder aux valeurs (exemples)
+        std::string addrRest = config.getString("config_server.addrServerRest");
+        int portTCP = config.getInt("config_server.serverTCP_port");
+        int portRest = config.getInt("config_server.PortServerRest");
+
+        // 3. Afficher les résultats
+        std::cout << "Configuration chargée :\n"
+                  << "- Addresse REST : " << addrRest << "\n"
+                  << "- Port TCP : " << portTCP << "\n"
+                  << "- Port REST : " << portRest << std::endl;
+
     } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
+        std::cerr << "Erreur : " << e.what() << std::endl;
         return 1;
     }
 
