@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2025/01/15 16:29:17.000.689,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1PCH1.h</Transaction>
+    <Transaction>2025/01/15 16:29:18.000.002,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Unit1.cpp</Transaction>
+    <Transaction>2025/03/19 13:12:03.000.931,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1PCH1.h</Transaction>
+    <Transaction>2025/03/19 13:12:03.000.944,=C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Unit1.cpp</Transaction>
+    <Transaction>2025/03/19 14:05:47.000.804,C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Unit1.cpp=C:\Users\achikhaoui\Desktop\IHMC4.cpp</Transaction>
+    <Transaction>2025/03/19 14:05:47.000.804,C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Unit1.h=C:\Users\achikhaoui\Desktop\IHMC4.h</Transaction>
+    <Transaction>2025/03/19 14:05:47.000.804,C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Unit1.dfm=C:\Users\achikhaoui\Desktop\IHMC4.dfm</Transaction>
+    <Transaction>2025/03/19 14:05:50.000.895,C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1PCH1.h=C:\Users\achikhaoui\Desktop\Project1PCH1.h</Transaction>
+    <Transaction>2025/03/19 14:05:51.000.583,C:\Users\achikhaoui\Documents\Embarcadero\Studio\Projets\Project1.cbproj=C:\Users\achikhaoui\Desktop\Project1.cbproj</Transaction>
+    <Transaction>2025/03/19 14:06:38.000.144,C:\Users\achikhaoui\Desktop\Project1.cbproj=C:\Users\achikhaoui\Desktop\IHM C4\Project1.cbproj</Transaction>
+    <Transaction>2025/03/19 14:07:41.000.553,=C:\Users\achikhaoui\Desktop\IHM C4\ClientTCP.cpp</Transaction>
+    <Transaction>2025/03/19 14:07:41.000.569,=C:\Users\achikhaoui\Desktop\IHM C4\GestionnaireSignification.cpp</Transaction>
+    <Transaction>2025/03/19 14:07:41.000.557,=C:\Users\achikhaoui\Desktop\IHM C4\ClientTCP.h</Transaction>
+    <Transaction>2025/03/19 15:05:50.000.677,C:\Users\achikhaoui\Desktop\IHM C4\Project1.cbproj=C:\Users\achikhaoui\Desktop\IHM C4\Project1.cbproj</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="..\..\Desktop"/>
+    <File Path="..\Project1PCH1.h"/>
+    <File Path="..\IHMC4.cpp"/>
+    <File Path="..\IHMC4.cpp"/>
+    <File Path="..\IHMC4.dfm"/>
+    <File Path="..\IHMC4.h"/>
+    <File Path="Project1.cpp"/>
+    <File Path="ClientTCP.cpp"/>
+    <File Path="ClientTCP.h"/>
+    <File Path="GestionnaireSignification.cpp"/>
+    <File Path="GestionnaireSignification.cpp"/>
+    <File Path="GestionnaireSignification.h"/>
+  </ProjectSortOrder>
+</BorlandProject>
