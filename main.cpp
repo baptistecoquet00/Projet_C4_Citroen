@@ -12,6 +12,7 @@
 #include "ServeurTCP.h"
 #include "JSONFile.h"
 #include "ClientTCP.h"
+#include "YamlConfigParser.h"
 typedef char _TCHAR;
 #define _tmain main
 
@@ -26,7 +27,7 @@ using namespace std;
 */
 string testUnitaire;
 //"CAN", "SERVEURTCP", "CLIENTREST", "COMPLET"
-
+YamlConfigParser parser("config_serveur.yml");
 VSCOM vscom;
 ServeurTCP serveur("0.0.0.0",2085);
 bool EnvoiTrameCAN=false;
@@ -175,7 +176,7 @@ string AffichageDonneeCAN_CreationJSON()
 	cout<<"=============================================="<<endl<<endl<<endl;
 	return json.getJSON();
 }
-void EnvoyerDonneesAuServeurREST(string addrEtPortServeur, string jsonstr)
+int EnvoyerDonneesAuServeurREST(string addrEtPortServeur, string jsonstr)
 {	int LengthJSON;
 	for(int i = 0;i<jsonstr.length();i++) LengthJSON =i;
 	string LengthJSONstr = std::to_string(LengthJSON+1);
@@ -192,16 +193,15 @@ void Parametrage_Serveur(){
 	if(testUnitaire=="SERVEURTCP" || testUnitaire=="COMPLET"){
 	cout<<"Veuillez choisir le port du Seveur TCP : ";
 	//cin>>PortServeurTCP;
-	PortServeurTCP =2085;
+	PortServeurTCP =parser.getIntValue("config_serveur", "serveurTCP_port");;
 	cout<<"Le port du serveur TCP choisi est : "<<PortServeurTCP<<"\n";
 	}
 	if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET"){
 		cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : ";
 		//cin>>AddrServeurRest;
-		//AddrServeurRest="172.20.21.73";
-		//AddrServeurRest="172.20.21.26";
-		AddrServeurRest="172.18.110.111";
-		PortServeurRest=3000;
+		
+		AddrServeurRest=parser.getValue("config_serveur", "ServeurRest.addrServeurRest");
+		PortServeurRest=parser.getIntValue("config_serveur", "ServeurRest.PortServeurRest");
 		cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
 		cout<<"Veuillez indiqué le port du Serveur Rest : ";
 		//cin>>PortServeurRest;
@@ -210,9 +210,17 @@ void Parametrage_Serveur(){
 		AddrEtPortServeurRest +=":";
 		AddrEtPortServeurRest+=std::to_string(PortServeurRest);
 		cout<<"Adresse et Port du Serveur Rest : "<<AddrEtPortServeurRest<<endl;
+		
 	}
-}
 
+	// parser.printConfig();
+
+    // std::cout << "\nPort TCP: " << parser.getIntValue("config_serveur", "serveurTCP_port") << "\n";
+    // std::cout << "Adresse Serveur REST: " << parser.getValue("config_serveur", "ServeurRest.addrServeurRest") << "\n";
+    // std::cout << "Port Serveur REST: " << parser.getIntValue("config_serveur", "ServeurRest.PortServeurRest") << "\n";
+}
+//AddrServeurRest="172.20.21.73";
+		//AddrServeurRest="172.20.21.26";
 int main(){
 	bool OK=true;
 	//AJOUTER 
@@ -220,7 +228,6 @@ int main(){
 	//cout port ServeurTCP 2085;
 	//cin IP serveur REST 172.18.110.111
 	//cout port serveur REST 3000
-
 	Parametrage_Serveur();
 	if(testUnitaire=="CAN" || testUnitaire=="COMPLET")
 	{	string leCOM="/dev/ttyUSB0";

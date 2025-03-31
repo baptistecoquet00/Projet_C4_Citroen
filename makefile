@@ -1,36 +1,34 @@
-CC=g++ 
-CFLAGS=-c -w
-# -Wall
+CC=g++
+CFLAGS=-c -Wall -std=c++17 -I$(INCLUDE_DIR)
+BIN_DIR=bin
+SRC_DIR=src
+INCLUDE_DIR=include
+OBJS = $(BIN_DIR)/main.o \
+       $(BIN_DIR)/VSCOM.o \
+       $(BIN_DIR)/SNPortSerie.o \
+       $(BIN_DIR)/ServeurTCP.o \
+       $(BIN_DIR)/SNIRconversions.o \
+       $(BIN_DIR)/MessageCAN.o \
+       $(BIN_DIR)/JSONFile.o \
+       $(BIN_DIR)/ClientTCP.o \
+       $(BIN_DIR)/YamlConfigParser.o
 
-all: Serveur main.o VSCOM.o SNPortSerie.o ServeurTCP.o 
+all: create_dir ServeurFinal
 
-main.o: main.cpp
-	$(CC) $(CFLAGS) main.cpp -std=c++11
+create_dir:
+	@mkdir -p $(BIN_DIR)
 
-VSCOM.o: VSCOM.cpp VSCOM.h
-	$(CC) $(CFLAGS) VSCOM.cpp
+install:
+	cp config_serveur.yml $(BIN_DIR)/
 
-SNPortSerie.o: SNPortSerie.h SNPortSerie.cpp
-	$(CC) $(CFLAGS) SNPortSerie.cpp
+ServeurFinal: $(OBJS)
+	$(CC) $(OBJS) -lpthread -o ServeurFinal
+	
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp $(INCLUDE_DIR)/%.h
+	$(CC) $(CFLAGS) $< -o $@
 
-ServeurTCP.o: ServeurTCP.h ServeurTCP.cpp
-	$(CC) $(CFLAGS) ServeurTCP.cpp
+$(BIN_DIR)/main.o: main.cpp
+	$(CC) $(CFLAGS) main.cpp -o $(BIN_DIR)/main.o
 
-SNIRconversions.o: SNIRconversions.h SNIRconversions.cpp
-	$(CC) $(CFLAGS) SNIRconversions.cpp
-
-MessageCAN.o: MessageCAN.h MessageCAN.cpp
-	$(CC) $(CFLAGS) MessageCAN.cpp
-
-JSONFile.o: JSONFile.h JSONFile.cpp
-	$(CC) $(CFLAGS) JSONFile.cpp
-
-ClientTCP.o: ClientTCP.h ClientTCP.cpp
-	$(CC) $(CFLAGS) ClientTCP.cpp
-
-Serveur: main.o VSCOM.o SNPortSerie.o ServeurTCP.o SNIRconversions.o MessageCAN.o JSONFile.o ClientTCP.o
-	$(CC) main.o VSCOM.o SNPortSerie.o ServeurTCP.o MessageCAN.o SNIRconversions.o JSONFile.o ClientTCP.o -lpthread -o Serveur 
-
-clean :
-	rm -f *.o Serveur
-
+clean:
+	rm -f $(BIN_DIR)/*.o ServeurFinal

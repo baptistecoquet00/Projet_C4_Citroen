@@ -25,7 +25,7 @@ bool VSCOM::OuvrirCOM()
 		}
 		if(!portCom->ModifierVitesse(V3000000_BAUD))
 		{
-			cout << "Erreur lors du paramétrage de la vitesse" << endl;
+			cout << "Erreur lors du paramï¿½trage de la vitesse" << endl;
 			return false;
 		}
 		ouvert = true;
@@ -37,7 +37,7 @@ bool VSCOM::OuvrirCOM()
 		ouvert = true;
 		#endif
     
-/*	if(portCom->envoyer(0x02))	//envoi du caractère 0x02 et test du port COM1
+/*	if(portCom->envoyer(0x02))	//envoi du caractï¿½re 0x02 et test du port COM1
 	{
 		ouvert=true;
 	}*/
@@ -47,7 +47,7 @@ void VSCOM::FermerCOM()
 {    portCom->fermer();
 	 delete portCom;
 }
-bool VSCOM::ConnexionVSCOM(char *Svitesse)    //S0 à S8 : 10k, 20k, 50k, 100k, 125k, 250k, 500k, 800k, 1Mbits/s
+bool VSCOM::ConnexionVSCOM(char *Svitesse)    //S0 ï¿½ S8 : 10k, 20k, 50k, 100k, 125k, 250k, 500k, 800k, 1Mbits/s
 {    char TrameConfig[30]="CFFFFFF\r";
 	strcpy(Svitesse,"\r");
 	unsigned char c[10];
