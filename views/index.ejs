@@ -1,14 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Accueil</title>
-  <link rel="stylesheet" href="/css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site C4</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/tableau.css">
 </head>
 <body>
-  <h1>Bienvenue sur mon site 🐒🍌👳🏿‍♂️</h1>
-  <p>Coucou les musulmans moi je mange la glace 🍧🍨🍦</p>
-  <p><a href="/about">À propos</a></p>
+    <nav class="menu">
+        <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#iidentifiants">Identifiants</a></li>
+            <li><a href="#graphique">Graphiques</a></li>
+            <li><a href="#apropos">À Propos</a></li>   
+        </ul>
+    </nav>
+
+    <main>
+        <section id="section1" class="active">
+            <h1>Bienvenue sur notre site</h1>
+            <p>Le projet propose un système d'identification automatique des messages CAN permettant de suivre l'évolution des données dans un véhicule. Des graphs ainsi que la signification de chaque message sont accessible.</p>
+        </section>
+        <section id="section2" class="active">
+            <h1>Descriptif de la maquette</h1>
+            <p>La maquette représente un véhicule de dernière génération, avec des éléments de Citroën C4 (C5Restylée) et de Peugeot 307 « Full CAN ».
+                Sur cette maquette vous retrouverez les réseaux de communication du constructeur :
+                CAN High Speed, CAN Low Speed et LIN.
+                Cette maquette est livrée avec le logiciel MUXTRACE et un boîtier USB-MUX-4C2L pour la
+                visualisation, l’analyse et l’émission de trames sur les réseaux du système.</p>
+                <img src="/img/maquette.PNG" class="section-image" title="Vue de la maquette utilisé">    
+        </section>
+
+        <section id="apropos">
+            <h2>À Propos</h2>
+            <p>Ressources utilisées dans le projet :</p>
+            <ul>
+                <li>Maquette Exxotest</li>
+                <li>Rasbperry Pi</li>
+                <li>VSCM USB-CAN</li>
+                <li>MiniPC sous Linux</li>
+                <li>PostgreSQL</li>
+                <li>Embarcadero</li>
+            </ul>
+        </section>
+        
+        <section id="graphiques">
+            <canvas id="monGraphe"></canvas>
+        </section>
+
+        <section id="iidentifiants">
+            <input type="button" value="identifiants CAN"id="identifiants">
+            <!-- <input type="button" value="signification"> -->
+            <input type="text" id="RechercheUnCan" placeholder="Rechercher un ID Can..." onkeypress="detecterEntree(event)">
+            <button onclick="AfficherIdentifiants()">Rechercher</button>
+
+            <div id="tableau"></div>
+        </section>
+    </main>
+
+    <script src="/js/script.js"></script>
+    
 </body>
 </html>

@@ -8,7 +8,7 @@ exports.getIdentifiants = async () => {
 };
 
 exports.getSignificationsTest= async () => {
-  const result = await db.query('SELECT * FROM significations_can');
+  const result = await db.query('SELECT * FROM significations_can ORDER BY can_id,octet ASC');
   console.log(result)
   return result.rows;
 };
@@ -21,6 +21,17 @@ exports.getSignifications = async (id) => {
     return result.rows;
   } catch (error) {
     console.error("Erreur lors de la récupération des significations :", error);
+    throw error;
+  }
+};
+exports.getUnIdentifiant = async (id) => {
+  try {
+    const query = "SELECT can_id FROM identifiants_can WHERE can_id = $1";
+    const result = await db.query(query, [id]); // Pas de conversion, id reste une chaîne
+    console.log(result.rows);
+    return result.rows;
+  } catch (error) {
+    console.error("Erreur lors de la récupération de cette identifiant:", error);
     throw error;
   }
 };
@@ -46,6 +57,18 @@ exports.getSignificationsUnOctet = async (id, octet) => {
     throw error;
   }
 };
+
+exports.getRegime = async (id) => {
+  try {
+    const query = "SELECT octet_7,octet_6,horodatage FROM trames_can WHERE can_id = $1 ";
+    const result = await db.query(query,[id]); // Deux paramètres dans la requête
+    console.log(result.rows);
+    return result.rows;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des regimerest.php :", error);
+    throw error;
+  }
+}
 
 ///////////////////////////////////////////////////////////////     POST     /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +116,8 @@ exports.PostTrame = async (body) => {
     return { error: "Erreur serveur" };
   }
 };
+
+
 // exports.PostTrame = async (body) => {
 //   try {
 //     const { users, data } = body;

@@ -1,0 +1,70 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--headlight-white);
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: left;
+}
+
+thead {
+    background: linear-gradient(135deg, var(--carbon-fiber), var(--midnight-blue));
+    color: var(--headlight-white);
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+thead th {
+    padding: 12px 15px;
+    border-bottom: 2px solid var(--racing-red);
+}
+
+tbody tr {
+    transition: background 0.3s ease;
+}
+
+tbody tr:nth-child(even) {
+    background-color: var(--brushed-aluminum);
+}
+
+tbody tr:hover {
+    background-color: var(--metallic-silver);
+}
+
+td {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--metallic-silver);
+}
+
+td:first-child {
+    font-weight: bold;
+    color: var(--midnight-blue);
+}
+
+tfoot {
+    background: var(--carbon-fiber);
+    color: var(--headlight-white);
+    font-weight: bold;
+    text-align: center;
+}
+
+tfoot td {
+    padding: 12px;
+}
+thead th:last-child,
+tbody th:last-child {
+    padding-left: 15px; 
+}
+#table a {
+    text-decoration: none; /* Supprime le soulignement */
+    color: #333; /* Couleur de base (à adapter à ton site) */
+    font-weight: bold; /* Rend le texte un peu plus marqué */
+    transition: color 0.3s ease-in-out; /* Effet fluide sur le changement de couleur */
+}
+
+/* Changement de couleur au survol */
+#table a:hover {
+    color: #007bff; /* Bleu ou toute autre couleur adaptée à ton design */
+    cursor: pointer; /* Affiche la main pour indiquer que c'est cliquable */
+}

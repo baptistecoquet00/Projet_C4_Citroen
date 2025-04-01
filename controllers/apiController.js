@@ -35,6 +35,20 @@ exports.getSignifications = async (req, res) => {
   }
 };
 
+exports.getUnIdentifiant = async (req, res) => {
+  const id = req.params.id;
+  // Vérifier que l'ID contient uniquement lettres et chiffres
+  if (!/^[a-zA-Z0-9]+$/.test(id)) {
+    return res.status(400).json({ error: "ID invalide." });
+  }
+  try {
+    const identifiant = await rest.getUnIdentifiant(id);
+    res.json(identifiant);
+  } catch (error) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
 exports.getSignificationsUnOctet = async (req, res) => {
   const id = req.params.id;
   const octet = req.params.octet;
@@ -45,6 +59,20 @@ exports.getSignificationsUnOctet = async (req, res) => {
   try {
     const significations = await rest.getSignificationsUnOctet(id, octet);
     res.json(significations);
+  } catch (error) {
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+exports.getRegime = async (req, res) => {
+  const id = req.params.id;
+  // Vérifier que l'ID contient uniquement lettres et chiffres
+  if (!/^[a-zA-Z0-9]+$/.test(id)) {
+    return res.status(400).json({ error: "ID invalide." });
+  }
+  try {
+    const regime = await rest.getRegime(id);
+    res.json(regime);
   } catch (error) {
     res.status(500).json({ error: "Erreur serveur" });
   }
@@ -87,7 +115,7 @@ exports.getTramesParId = async (req, res) => {
 };
 
 exports.lien = async (req,res) => {
-  lien = "https://prod.liveshare.vsengsaas.visualstudio.com/join?02CB741BAE65E711C7B1D120573B63E28B70"
+  lien = "https://prod.liveshare.vsengsaas.visualstudio.com/join?FD8C3B29DCF7A3F6968731C0CCDAA8A02D3D"
   res.send(lien)
 }
 // exports.PostTrame = async (req, res) => {
