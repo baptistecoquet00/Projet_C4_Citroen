@@ -1,5 +1,5 @@
 config_serveur:
-      serveurTCP_port: 3085
+      serveurTCP_port: 2085
       ServeurRest:
         addrServeurRest: '172.18.110.111'
-        PortServeurRest: 4000
+        PortServeurRest: 3000

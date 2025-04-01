@@ -200,8 +200,8 @@ void Parametrage_Serveur(){
 		cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : ";
 		//cin>>AddrServeurRest;
 		
-		AddrServeurRest=parser.getValue("config_serveur", "ServeurRest.addrServeurRest");
-		PortServeurRest=parser.getIntValue("config_serveur", "ServeurRest.PortServeurRest");
+		AddrServeurRest=parser.getValue("config_serveur", "addrServeurRest");
+		PortServeurRest=parser.getIntValue("config_serveur", "PortServeurRest");
 		cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
 		cout<<"Veuillez indiqué le port du Serveur Rest : ";
 		//cin>>PortServeurRest;
