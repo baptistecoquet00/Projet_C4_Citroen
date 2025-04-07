@@ -186,15 +186,15 @@ int EnvoyerDonneesAuServeurREST(string addrEtPortServeur, string jsonstr)
 }
 
 void Parametrage_Serveur(){
-	cout<<"Veuillez choisir le test Unitaire entre \"CAN\", \"SERVEURTCP\", \"CLIENTREST\", \"COMPLET\" : ";
-	cin>>testUnitaire;
+	//cout<<"Veuillez choisir le test Unitaire entre \"CAN\", \"SERVEURTCP\", \"CLIENTREST\", \"COMPLET\" : ";
+	testUnitaire = parser.getValue("config_serveur", "test_unitaire");;
 	//testUnitaire ="COMPLET";
-	cout<<"Le test Unitaire choisi est : "<<testUnitaire<<"\n";
+	cout<<"Le test Unitaire est : "<<testUnitaire<<"\n";
 	if(testUnitaire=="SERVEURTCP" || testUnitaire=="COMPLET"){
-	cout<<"Veuillez choisir le port du Seveur TCP : ";
+	//cout<<"Veuillez choisir le port du Seveur TCP : ";
 	//cin>>PortServeurTCP;
 	PortServeurTCP =parser.getIntValue("config_serveur", "serveurTCP_port");;
-	cout<<"Le port du serveur TCP choisi est : "<<PortServeurTCP<<"\n";
+	cout<<"Le port du serveur TCP est : "<<PortServeurTCP<<"\n";
 	}
 	if(testUnitaire=="CLIENTREST" || testUnitaire=="COMPLET"){
 		cout<<"Veuillez choisir indiquer l'adresse du Serveur Rest : ";
@@ -202,10 +202,10 @@ void Parametrage_Serveur(){
 		
 		AddrServeurRest=parser.getValue("config_serveur", "addrServeurRest");
 		PortServeurRest=parser.getIntValue("config_serveur", "PortServeurRest");
-		cout<<"L'adresse indiqué du Serveur Rest : "<<AddrServeurRest<<"\n";
-		cout<<"Veuillez indiqué le port du Serveur Rest : ";
+		cout<<"L'adresse du Serveur Rest : "<<AddrServeurRest<<"\n";
+		//cout<<"Veuillez indiqué le port du Serveur Rest : ";
 		//cin>>PortServeurRest;
-		cout<<"Le port du serveur Rest indiqué est : "<<PortServeurRest<<"\n";
+		cout<<"Le port du serveur Rest est : "<<PortServeurRest<<"\n";
 		AddrEtPortServeurRest = AddrServeurRest;
 		AddrEtPortServeurRest +=":";
 		AddrEtPortServeurRest+=std::to_string(PortServeurRest);

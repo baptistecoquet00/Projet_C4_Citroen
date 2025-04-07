@@ -1,4 +1,5 @@
 config_serveur:
+      test_unitaire: 'COMPLET'
       serveurTCP_port: 2085
       ServeurRest:
         addrServeurRest: '172.18.110.111'
